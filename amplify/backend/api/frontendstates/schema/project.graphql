@@ -1,0 +1,22 @@
+enum ProjectType {
+  SINGLE_BUILDING
+  LOAD_REPLACEMENT
+}
+
+enum ProjectStatus {
+  QUESTIONNAIRE_IN_PROGRESS
+  QUESTIONNAIRE_COMPLETED
+  SIMULATION_IN_PROGRESS
+  SIMULATION_COMPLETED
+  FEASIBILITY_ANALYSIS_RECEIVED
+}
+type Project @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  type: ProjectType!
+  status: ProjectStatus!
+  history: [String]
+  location: Location
+  answer: [Answer] @connection(keyName: "byProject", fields: ["id"])
+  incentive: [ProjectIncentive]
+    @connection(keyName: "byProject", fields: ["id"])
+}

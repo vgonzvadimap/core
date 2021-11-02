@@ -1,0 +1,149 @@
+enum IncentiveType {
+  Production_Based_Incentive
+  System_Cost_Incentive
+  System_Size_Incentive
+  Fixed_Amount_Incentive
+  Equipment_Depreciation
+  EV_Charging_Stations
+}
+
+enum PowerBase {
+  DC_system_size_at_standard_test_conditions
+  DC_system_size_at_Performance_test_condition
+  AC_system_size
+}
+
+# enum IncentiveCalculationParameters {
+#   ED_PARAMS = 'equipement_depreciation_params'
+#   # TODO: Escalate all parameters in kwargs[''] here
+#   # 'produced_kwh''system_installation_cost''system_storage_cost''system_solar_pv_cost'
+#   # 'system_inverter_cost''system_disconnect_switch_and_other_cost'
+# }
+
+type Incentive @model @key(name: "byUtility", fields: ["utilityID"]) {
+  id: ID!
+  project: [ProjectIncentive]
+    @connection(keyName: "byIncentive", fields: ["id"]) #is it really in relationship with a projet or a prescription or both?
+  type: IncentiveType!
+  name: String!
+  zone: [IncentiveZone] @connection(keyName: "byIncentive", fields: ["id"])
+
+  utilityID: ID!
+  utility: Utility @connection(fields: ["utilityID"])
+
+  last_updated: AWSDateTime!
+  is_cumulative: Boolean!
+
+  # should I separate the  incentive types in other models, so it is not all clustered in this one? Maybe actually
+  # PRODUCTION BASED FIELDS
+  pbi_rate: Float
+  pbi_variation: Float
+  pbi_duration: Int
+  pbi_cap_value: Float
+  # SYSTEM COST INCENTIVE FIELDS
+  sci_installation_cost_included: Boolean
+  sci_storage_cost_included: Boolean
+  sci_solar_pv_cost_included: Boolean
+  sci_inverter_cost_included: Boolean
+  sci_disconnect_switch_and_other_cost_included: Boolean
+  sci_amount: Float
+  sci_cap: Float
+  sci_incentive_type: Boolean
+  # SYSTEM SIZE INCENTIVE
+  ssi_power_base: String
+  ssi_amount: Float
+  ssi_cap: Float
+  ssi_tax_rate: Float
+  # FIXED AMOUNT
+  fai_amount: Float
+  fai_tax_rate: Float
+  # EQUIPMENT DEPRECIATION
+  ed_incentive_value: Float
+  ed_percentage_eligible: Float
+  ed_taxe_rate: Float
+  ed_depreciation_table: [DepreciationTable_Incentive]
+    @connection(keyName: "byIncentive", fields: ["id"])
+  # EV CHARGING STATIONS
+  evcs_amount_install: Float
+  evcs_amount_hw: Float
+  evcs_cap: Float
+  evcs_fixed_amount: Float
+}
+
+type ProjectIncentive
+  @model(queries: null)
+  @key(name: "byProject", fields: ["projectID", "incentiveID"])
+  @key(name: "byIncentive", fields: ["incentiveID", "projectID"]) {
+  id: ID!
+
+  projectID: ID!
+  project: Project! @connection(fields: ["projectID"])
+
+  incentiveID: ID!
+  incentive: Incentive! @connection(fields: ["incentiveID"])
+}
+
+type IncentiveZone
+  @model(queries: null)
+  @key(name: "byZone", fields: ["zoneID", "incentiveID"])
+  @key(name: "byIncentive", fields: ["incentiveID", "zoneID"]) {
+  id: ID!
+
+  zoneID: ID!
+  zone: Zone! @connection(fields: ["zoneID"])
+
+  incentiveID: ID!
+  incentive: Incentive! @connection(fields: ["incentiveID"])
+}
+
+type DepreciationTable
+  @model
+  @key(name: "bySubcategory", fields: ["subcategoryID"])
+  @key(name: "byZone", fields: ["zoneID"])
+  @key(name: "byDepreciationEntry", fields: ["depreciationEntryID"]) {
+  id: ID!
+
+  subcategoryID: ID!
+  subcategory: Subcategory @connection(fields: ["subcategoryID"])
+
+  zoneID: ID!
+  zone: Zone @connection(fields: ["zoneID"])
+
+  depreciationEntryID: ID!
+  depreciationEntry: DepreciationEntry
+    @connection(fields: ["depreciationEntryID"])
+
+  incentive: [DepreciationTable_Incentive]
+    @connection(keyName: "byDepreciationTable", fields: ["id"])
+
+  depreciation_type: Boolean!
+  depreciation_straigth_line_yrs: Int!
+}
+
+type DepreciationEntry @model {
+  id: ID!
+  year: Int!
+  depreciation_percentage_1: Float!
+  depreciation_percentage_2_25: Float!
+  depreciation_table: [DepreciationTable]
+    @connection(keyName: "byDepreciationEntry", fields: ["id"])
+}
+
+# many to many relation car nous pourrions vouloir avoir la table avec le straight line
+# ou bien le depreciation table normal
+type DepreciationTable_Incentive
+  @model(queries: null)
+  @key(
+    name: "byDepreciationTable"
+    fields: ["depreciationTableID", "incentiveID"]
+  )
+  @key(name: "byIncentive", fields: ["incentiveID", "depreciationTableID"]) {
+  id: ID!
+
+  depreciationTableID: ID!
+  depreciationTable: DepreciationTable!
+    @connection(fields: ["depreciationTableID"])
+
+  incentiveID: ID!
+  incentive: Incentive! @connection(fields: ["incentiveID"])
+}

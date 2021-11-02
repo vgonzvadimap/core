@@ -1,0 +1,299 @@
+enum ChemestryCompatibility {
+  Lithium_Ion
+  Lithium_Ion_FLP
+  Lead_Acid_ADM
+  Lead_Acid_Gel
+}
+
+enum Applications {
+  V2B
+  Dumb_charge
+  Smart_charge
+  Heila_compatible
+  Other
+}
+
+enum VoltageConnections {
+  MONO_120_240V_split_phase
+  MONO_120V
+  MONO_240V
+  TRI_120_208V
+  TRI_347_600V
+  TRI_240V
+  TRI_480V
+  TRI_277_480V
+  TRI_600V
+  TRI_400V
+  TRI_127_220V
+  TRI_440V
+}
+
+enum Frequency {
+  Hz_50
+  Hz_60
+}
+
+type BatterySpecs {
+  id: ID!
+  #lifetime
+  lifetime_cycle: Int!
+  lifetime_calendar: Int!
+  lifetime_cycle_dod: Float!
+  #chemestry
+  bess_chemestry_compatibility_1: ChemestryCompatibility!
+  bess_chemestry_compatibility_2: ChemestryCompatibility
+  bess_chemestry_compatibility_3: ChemestryCompatibility
+  bess_chemestry_compatibility_4: ChemestryCompatibility
+  #electrical specs
+  mean_efficiency: Float!
+  #current
+  max_charge: Float!
+  nominal_charge: Float!
+  max_discharge: Float!
+  nominal_discharge: Float!
+  #voltage
+  max_voltage: Float!
+  min_voltage: Float!
+  nominal_voltage: Float!
+  #capacity
+  rated_Ah: Float!
+  rated_kWh: Float!
+}
+
+type EVChargerSpecs {
+  id: ID!
+  lifetime_warranty: Int!
+  applications: Applications!
+  applications_other: String
+  #specs
+  port_NB: Int!
+  max_power_per_port_kW: Float!
+  voltage_connections_main: VoltageConnections!
+  voltage_connections_secondary: VoltageConnections
+}
+
+type InverterSpecs {
+  id: ID!
+  # AC
+  #power
+  max_power_kW: Float!
+  nominal_power_kw: Float!
+  #current
+  peak_current: Float!
+  peak_duration_seconds: Int!
+  breaker_size: Int!
+  max_continuous_current: Float!
+
+  phases_NB: Int!
+  voltage_connections_main: VoltageConnections!
+  voltage_connections_secondary: VoltageConnections
+  frequency: Frequency!
+  active_frequency_shift_curtailment: Boolean!
+  # DC
+  MPPT_NB: Int!
+  max_power_per_MPPT_kW: Float!
+  #current
+  max_MPPT1: Float!
+  max_MPPT2: Float
+  max_MPPT3: Float
+  max_MPPT4: Float
+  max_MPPT5: Float
+  total_max: Float!
+  usable_MPPT1: Float!
+  usable_MPPT2: Float
+  usable_MPPT3: Float
+  usable_MPPT4: Float
+  usable_MPPT5: Float
+  #voltage
+  MPPT_max_voltage: Float!
+  MPPT_min_voltage: Float!
+  nominal_voltage: Float!
+  total_max_voltage: Float!
+  operating_max_voltage: Float!
+  operating_min_voltage: Float!
+  #combiner boxes
+  internal: Boolean!
+  string_number_limitation: Int!
+  current_limitation: Float!
+
+  lifetime_warranty: Int!
+  grid_forming: Boolean!
+  CEC_efficiency: Float!
+  MAX_efficiency: Float!
+}
+
+type InverterChargerSpecs {
+  id: ID!
+  lifetime_warranty: Int!
+  grid_forming: Boolean!
+  UPS_function: Boolean!
+  # DC
+  #current
+  nominal_charge: Float!
+  nominal_discharge: Float!
+  max_charge: Float!
+  max_discharge: Float!
+  #voltage
+  max_voltage_DC: Float!
+  min_voltage_DC: Float!
+  nominal_voltage_DC: Float!
+  #chemistry
+  bess_chemestry_compatibility_1: ChemestryCompatibility!
+  bess_chemestry_compatibility_2: ChemestryCompatibility
+  bess_chemestry_compatibility_3: ChemestryCompatibility
+  bess_chemestry_compatibility_4: ChemestryCompatibility
+
+  efficiency: Float!
+  # AC
+  nominal_power_kw: Float!
+  #current
+  peak_current: Float!
+  nominal_current: Float!
+  #voltage
+  voltage_connections_main: VoltageConnections!
+  voltage_connections_secondary: VoltageConnections
+  max_voltage_AC: Float!
+  min_voltage_AC: Float!
+  nominal_voltage_AC: Float!
+
+  frequency: Frequency!
+}
+
+type HybridInverterSpecs {
+  id: ID!
+  #general
+  lifetime: Int!
+  voltage_connections_main: VoltageConnections!
+  voltage_connections_secondary: VoltageConnections
+  grid_forming: Boolean!
+  external_MPPT: Boolean!
+  stacking_limit: Int!
+  thee_phase_stacking: Int!
+  UPS_function: Boolean!
+  # AC
+  efficiency_AC: Float!
+  nominal_power_kw: Float!
+  #current
+  peak_current: Float!
+  nominal_current: Float!
+
+  frequency: Frequency!
+  active_frequency_shift_curtailment: Boolean!
+
+  #solar(DC)
+  MPPT_NB: Int!
+  max_power_per_MPPT_kW: Float!
+  #current
+  max_MPPT1: Float!
+  max_MPPT2: Float
+  max_MPPT3: Float
+  max_MPPT4: Float
+  max_MPPT5: Float
+  total_max: Float!
+  usable_MPPT1: Float!
+  usable_MPPT2: Float
+  usable_MPPT3: Float
+  usable_MPPT4: Float
+  usable_MPPT5: Float
+  #voltage
+  MPPT_max_voltage: Float!
+  MPPT_min_voltage: Float!
+  MPPT_nominal_voltage: Float!
+  total_max_voltage: Float!
+  operating_max_voltage: Float!
+  operating_min_voltage: Float!
+  #combiner boxes
+  internal: Boolean!
+  string_number_limitation: Int!
+  current_limitation: Float!
+
+  #batteries
+  #current
+  nominal_charge: Float!
+  nominal_discharge: Float!
+  #voltage
+  max_voltage: Float!
+  min_voltage: Float!
+  nominal_voltage: Float!
+  #chemistry
+  bess_chemestry_compatibility_1: ChemestryCompatibility!
+  bess_chemestry_compatibility_2: ChemestryCompatibility
+  bess_chemestry_compatibility_3: ChemestryCompatibility
+  bess_chemestry_compatibility_4: ChemestryCompatibility
+
+  efficiency_DC: Float!
+  max_capacity_kWh: Float!
+  min_capacity_kWh: Float!
+}
+
+type MPPTSpecs {
+  id: ID!
+  #inverter dc up to grid forming - check again with Sam
+  # DC
+  MPPT_NB: Int!
+  max_power_per_MPPT_kW: Float!
+  #current
+  max_MPPT1: Float!
+  max_MPPT2: Float
+  max_MPPT3: Float
+  max_MPPT4: Float
+  max_MPPT5: Float
+  total_max: Float!
+  usable_MPPT1: Float!
+  usable_MPPT2: Float
+  usable_MPPT3: Float
+  usable_MPPT4: Float
+  usable_MPPT5: Float
+  #voltage
+  MPPT_max_voltage: Float!
+  MPPT_min_voltage: Float!
+  nominal_voltage: Float!
+  total_max_voltage: Float!
+  operating_max_voltage: Float!
+  operating_min_voltage: Float!
+  #combiner boxes
+  internal: Boolean!
+  string_number_limitation: Int!
+  current_limitation: Float!
+
+  lifetime_warranty: Int!
+  grid_forming: Boolean!
+}
+
+type SolarPanelSpecs {
+  id: ID!
+  lifetime_warranty: Int!
+  #dimentions
+  width_m: Float!
+  length_m: Float!
+  thickness_mm: Float!
+
+  is_bifacial: Boolean!
+  #electrical specs
+  IMP: Float!
+  ISC: Float!
+  VMP: Float!
+  VOC: Float!
+  NOCT: Int!
+  NCell: Int!
+  efficiency: Float!
+  bifaial_gain: Float!
+  temp_coeff_Isc: Float!
+  temp_coeff_Voc: Float!
+  temp_coeff_Pmax: Float!
+  rated_power_stc_W: Float!
+}
+
+type Specs @model {
+  id: ID!
+
+  equipment: [Equipment] @connection(keyName: "bySpecs", fields: ["id"])
+
+  batterySpecs: BatterySpecs
+  evChargerSpecs: EVChargerSpecs
+  hybridInverterSpecs: HybridInverterSpecs
+  inverterSpecs: InverterSpecs
+  inverterChargerSpecs: InverterChargerSpecs
+  mpptSpecs: MPPTSpecs
+  solarPanelSpecs: SolarPanelSpecs
+}

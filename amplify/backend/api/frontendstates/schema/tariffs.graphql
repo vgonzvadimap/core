@@ -1,0 +1,265 @@
+enum EnergyRateType {
+  Flat_Rate
+  Tiered_Rate_Plan
+  Conditional_Tiered_Rate_Plan
+}
+
+enum PowerRateType {
+  Fixed_Power_Contract
+  Variable_Power_Contract
+}
+
+enum TimePeriod {
+  Yearly
+  Monthly
+  Daily
+  Hourly
+}
+
+enum NetMeteringLimitTypes {
+  AC
+  DC
+  MIN
+  MAX
+  No_Limit
+}
+
+enum Days {
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
+  Weekdays
+  Weekends
+  All
+}
+
+enum Tier {
+  Tier_1
+  Tier_2
+  Tier_3
+  Tier_4
+  Tier_5
+  Balance
+}
+
+enum BuildingType {
+  Office
+  Education
+  Hospital
+  Lodging_Residential
+  Warehouse
+  Stand_alone_retail
+  Strip_mall
+  Restaurant
+  Supermarket
+  Entertainment_public_assembly
+  Public_services
+}
+
+enum PhaseType {
+  One_Phase
+  Three_Phase
+  Both_Phases
+}
+
+enum Unit {
+  kW
+  kVa
+}
+
+type Tariff @model @key(name: "byUtility", fields: ["utilityID"]) {
+  id: ID!
+  name: String!
+  #legislation and location have been transfered to zone
+  zone: [TariffZone] @connection(keyName: "byTariff", fields: ["id"])
+
+  utilityID: ID!
+  utility: Utility @connection(fields: ["utilityID"])
+
+  last_updated: AWSDateTime!
+  notes: String!
+
+  max_energy_consumption_kWh: Float
+  max_energy_consumption_period: TimePeriod
+
+  max_demand_power_peak: Float
+  max_demand_unit: Unit
+  max_demand_period: TimePeriod
+
+  min_demand_power_peak: Float
+  min_demand_unit: Unit
+  min_demand_period: TimePeriod
+
+  #Rate Plan
+  energy_rate_type: EnergyRateType!
+
+  flat_rate: Float
+
+  base_rate: Float
+
+  tierRateEntry: [TierRateEntry]
+    @connection(keyName: "byTariff", fields: ["id"])
+
+  capacity_per_period: TimePeriod
+  conditionalTierRateEntry: [ConditionalTierRateEntry]
+    @connection(keyName: "byTariff", fields: ["id"])
+
+  has_net_metering_program: Boolean!
+  net_metering_limit: Float
+  net_metering_limit_type: NetMeteringLimitTypes
+
+  has_feed_in_program: Boolean!
+  sellback_rate: Float
+  has_tou_feed_in: Boolean!
+  feedInTariffTOUEntry: [FeedInTariffTOUEntry]
+    @connection(keyName: "byTariff", fields: ["id"])
+
+  has_tou_pricing: Boolean!
+  energyTOUEntry: [EnergyTOUEntry]
+    @connection(keyName: "byTariff", fields: ["id"])
+
+  has_base_price_WE: Boolean!
+
+  #Power pricing
+  power_rate_type: PowerRateType!
+
+  has_fixed_power_contracct: Boolean!
+  power_contract_rate: Float
+  above_kW: Float
+
+  has_variable_pricing: Boolean!
+  powerRateEntry: [PowerRateEntry]
+    @connection(keyName: "byTariff", fields: ["id"])
+
+  has_tou_power_pricing: Boolean!
+  powerTOUEntry: [PowerTOUEntry]
+    @connection(keyName: "byTariff", fields: ["id"])
+
+  has_lesser_of_pricing: Boolean!
+  lesser_of_kW: Float
+  lesser_of_kWh: Float
+
+  has_power_demand_peak_exceeding_pricing: Boolean!
+  period_not_to_exceed: TimePeriod
+  max_power_per_period: Float
+  rate_after_exceeded: Tier
+
+  has_yr_per_yr_dynamic_pwr_contract: Boolean!
+
+  #Fixed charge
+  has_flat_charge: Boolean!
+  flat_charge_period: TimePeriod
+  flat_charge_amount: Float
+
+  has_variable_charge: Boolean!
+
+  installation_power_value: Float!
+  electric_consumption: Float!
+
+  #Rebate
+  rebate_percentage: Float!
+
+  #Other_tax_surcharges
+  tax_surcharge_percentage: Float!
+
+  #Demand responses
+  has_demand_response: Boolean!
+  demand_response_rate_kWh: Float!
+  credit_price_kW: Float!
+
+  #Misc
+  interconnection_limit: Float!
+}
+
+type TariffZone
+  @model(queries: null)
+  @key(name: "byZone", fields: ["zoneID", "tariffID"])
+  @key(name: "byTariff", fields: ["tariffID", "zoneID"]) {
+  id: ID!
+
+  zoneID: ID!
+  zone: Zone! @connection(fields: ["zoneID"])
+
+  tariffID: ID!
+  tariff: Tariff! @connection(fields: ["tariffID"])
+}
+
+type TierRateEntry @model @key(name: "byTariff", fields: ["tariffID"]) {
+  id: ID!
+
+  tariffID: ID!
+  tariff: [Tariff] @connection(fields: ["tariffID"])
+
+  max_kwh: Float!
+  rate: Float!
+}
+
+type ConditionalTierRateEntry
+  @model
+  @key(name: "byTariff", fields: ["tariffID"]) {
+  id: ID!
+
+  tariffID: ID!
+  tariff: [Tariff] @connection(fields: ["tariffID"])
+
+  max_kwh: Float!
+  mumber_of_days_in_month: Int!
+  rate: Float!
+}
+
+type PowerRateEntry @model @key(name: "byTariff", fields: ["tariffID"]) {
+  id: ID!
+
+  tariffID: ID!
+  tariff: [Tariff] @connection(fields: ["tariffID"])
+
+  min_kWh: Float!
+  max_kWh: Float!
+  rate: Float!
+}
+
+type EnergyTOUEntry @model @key(name: "byTariff", fields: ["tariffID"]) {
+  id: ID!
+
+  tariffID: ID!
+  tariff: [Tariff] @connection(fields: ["tariffID"])
+
+  rate: Float!
+  starting_hour: AWSTime!
+  ending_hour: AWSTime!
+  days: Days!
+  start_date: AWSDate!
+  end_date: AWSDate!
+}
+
+type FeedInTariffTOUEntry @model @key(name: "byTariff", fields: ["tariffID"]) {
+  id: ID!
+
+  tariffID: ID!
+  tariff: [Tariff] @connection(fields: ["tariffID"])
+
+  rate: Float!
+  starting_hour: AWSTime!
+  ending_hour: AWSTime!
+  days: Days!
+  start_date: AWSDate!
+  end_date: AWSDate!
+}
+
+type PowerTOUEntry @model @key(name: "byTariff", fields: ["tariffID"]) {
+  id: ID!
+
+  tariffID: ID!
+  tariff: [Tariff] @connection(fields: ["tariffID"])
+
+  rate: Float!
+  starting_hour: AWSTime!
+  ending_hour: AWSTime!
+  days: Days!
+  start_date: AWSDate!
+  end_date: AWSDate!
+}

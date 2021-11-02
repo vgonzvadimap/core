@@ -1,0 +1,111 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-frontendplatform-victordev-105851-authRole",
+      "UnauthRoleArn": "arn:aws:iam::718770198770:role/amplify-frontendplatform-victordev-105851-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::718770198770:role/amplify-frontendplatform-victordev-105851-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-frontendplatform-victordev-105851-deployment",
+      "UnauthRoleName": "amplify-frontendplatform-victordev-105851-unauthRole",
+      "StackName": "amplify-frontendplatform-victordev-105851",
+      "StackId": "arn:aws:cloudformation:us-east-1:718770198770:stack/amplify-frontendplatform-victordev-105851/90ba9d60-37ff-11ec-8636-0e5f5b5ba89f",
+      "AmplifyAppId": "d3v6k3h4q38zex"
+    }
+  },
+  "auth": {
+    "frontendplatform8e8fa257": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false,
+      "frontendAuthConfig": {
+        "loginMechanisms": [],
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": []
+        },
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      }
+    }
+  },
+  "api": {
+    "frontendstates": {
+      "service": "AppSync",
+      "providerPlugin": "awscloudformation",
+      "output": {
+        "authConfig": {
+          "defaultAuthentication": {
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authfrontendplatform8e8fa257"
+            }
+          },
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ]
+        },
+        "GraphQLAPIEndpointOutput": "http://192.168.2.22:20002/graphql",
+        "GraphQLAPIKeyOutput": "da2-fakeApiId123456"
+      },
+      "testMode": true,
+      "lastPushTimeStamp": "2021-11-01T13:09:41.980Z"
+    }
+  },
+  "storage": {
+    "frontendstorage": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation"
+    }
+  },
+  "function": {
+    "getIeccClimateZone": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [],
+      "lastBuildTimeStamp": "2021-10-28T18:08:47.301Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2021-10-28T18:08:58.448Z",
+      "distZipFilename": "getIeccClimateZone-6b504161667447415275-build.zip"
+    },
+    "stateOrchestrator": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "frontendstates",
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput"
+          ]
+        }
+      ],
+      "lastBuildTimeStamp": "2021-10-28T18:09:05.870Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2021-10-28T18:09:08.749Z",
+      "distZipFilename": "stateOrchestrator-423344564e6b54515373-build.zip"
+    },
+    "manageEquipmentSpecs": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "lastBuildTimeStamp": "2021-10-28T18:09:15.217Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2021-10-28T18:09:18.492Z",
+      "distZipFilename": "manageEquipmentSpecs-4a6a4638692f57327976-build.zip"
+    }
+  }
+}

@@ -1,0 +1,51 @@
+type Location {
+  id: ID!
+  address: String!
+  latitude: Float
+  longitude: Float
+  timezone: String
+}
+
+type Zone @model {
+  id: ID!
+  geo_zone: AWSJSON
+  utility: [UtilityZone] @connection(keyName: "byZone", fields: ["id"])
+  certification: [CertificationZone]
+    @connection(keyName: "byZone", fields: ["id"])
+  incentive: [IncentiveZone] @connection(keyName: "byZone", fields: ["id"])
+  depreciation_table: [DepreciationTable]
+    @connection(keyName: "byZone", fields: ["id"])
+  tariff: [TariffZone] @connection(keyName: "byZone", fields: ["id"])
+}
+
+type Utility @model {
+  id: ID!
+  zone: [UtilityZone] @connection(keyName: "byUtility", fields: ["id"])
+  incentive: [Incentive] @connection(keyName: "byUtility", fields: ["id"])
+  tariff: [Tariff] @connection(keyName: "byUtility", fields: ["id"])
+}
+
+type UtilityZone
+  @model(queries: null)
+  @key(name: "byZone", fields: ["zoneID", "utilityID"])
+  @key(name: "byUtility", fields: ["utilityID", "zoneID"]) {
+  id: ID!
+
+  zoneID: ID!
+  zone: Zone! @connection(fields: ["zoneID"])
+
+  utilityID: ID!
+  utility: Utility! @connection(fields: ["utilityID"])
+
+  certification: [Certification_UtilityZone]
+    @connection(keyName: "byUtilityZone", fields: ["id"])
+}
+
+type Query {
+  getIeccClimateZone(lat: Float!, lon: Float!, kg_zone: String!): AWSJSON
+    @function(name: "getIeccClimateZone-{env}")
+  manageProjectState(project_id: String): AWSJSON
+    @function(name: "stateOrchestrator-${env}")
+  manageEquipmentSpecs(method: String, params: AWSJSON): AWSJSON
+    @function(name: "manageEquipmentSpecs-{env}")
+}

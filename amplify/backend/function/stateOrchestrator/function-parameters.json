@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "api": {
+      "frontendstates": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  },
+  "lambdaLayers": [],
+  "secretNames": [
+    "GOOGLE_API_KEY"
+  ]
+}

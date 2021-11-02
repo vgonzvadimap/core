@@ -1,0 +1,62 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-amplify35504962d1724-staging-153043-authRole",
+      "UnauthRoleArn": "arn:aws:iam::718770198770:role/amplify-amplify35504962d1724-staging-153043-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::718770198770:role/amplify-amplify35504962d1724-staging-153043-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-amplify35504962d1724-staging-153043-deployment",
+      "UnauthRoleName": "amplify-amplify35504962d1724-staging-153043-unauthRole",
+      "StackName": "amplify-amplify35504962d1724-staging-153043",
+      "StackId": "arn:aws:cloudformation:us-east-1:718770198770:stack/amplify-amplify35504962d1724-staging-153043/61c25b10-1d4c-11ec-a011-0adec8a6997d",
+      "AmplifyAppId": "d3v6k3h4q38zex"
+    },
+    "categories": {
+      "auth": {
+        "frontendplatform8e8fa257": {}
+      },
+      "function": {
+        "testFunction": {
+          "testEnv": "13",
+          "testKey": "key_string"
+        },
+        "lambdaresolvertest": {
+          "testVar": "oh_yea"
+        },
+        "getLocationDetails": {
+          "secretsPathAmplifyAppId": "d3v6k3h4q38zex"
+        },
+        "stateOrchestrator": {
+          "secretsPathAmplifyAppId": "d3v6k3h4q38zex",
+          "deploymentBucketName": "amplify-amplify35504962d1724-staging-153043-deployment",
+          "s3Key": "amplify-builds/stateOrchestrator-596c796b5174524f426a-build.zip"
+        }
+      }
+    }
+  },
+  "victordev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-frontendplatform-victordev-105851-authRole",
+      "UnauthRoleArn": "arn:aws:iam::718770198770:role/amplify-frontendplatform-victordev-105851-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::718770198770:role/amplify-frontendplatform-victordev-105851-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-frontendplatform-victordev-105851-deployment",
+      "UnauthRoleName": "amplify-frontendplatform-victordev-105851-unauthRole",
+      "StackName": "amplify-frontendplatform-victordev-105851",
+      "StackId": "arn:aws:cloudformation:us-east-1:718770198770:stack/amplify-frontendplatform-victordev-105851/90ba9d60-37ff-11ec-8636-0e5f5b5ba89f",
+      "AmplifyAppId": "d3v6k3h4q38zex"
+    },
+    "categories": {
+      "auth": {
+        "frontendplatform8e8fa257": {}
+      },
+      "function": {
+        "getIeccClimateZone": {},
+        "stateOrchestrator": {
+          "secretsPathAmplifyAppId": "d3v6k3h4q38zex"
+        },
+        "manageEquipmentSpecs": {}
+      }
+    }
+  }
+}

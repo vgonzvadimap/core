@@ -1,0 +1,3316 @@
+type Location @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  address: String!
+  latitude: Float
+  longitude: Float
+  timezone: String
+}
+
+type Zone {
+  id: ID!
+  geo_zone: AWSJSON
+  utility(utilityID: ModelIDKeyConditionInput, filter: ModelUtilityZoneFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelUtilityZoneConnection
+  certification(certificationID: ModelIDKeyConditionInput, filter: ModelCertificationZoneFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCertificationZoneConnection
+  incentive(incentiveID: ModelIDKeyConditionInput, filter: ModelIncentiveZoneFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelIncentiveZoneConnection
+  depreciation_table(filter: ModelDepreciationTableFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelDepreciationTableConnection
+  tariff(tariffID: ModelIDKeyConditionInput, filter: ModelTariffZoneFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTariffZoneConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Utility {
+  id: ID!
+  zone(zoneID: ModelIDKeyConditionInput, filter: ModelUtilityZoneFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelUtilityZoneConnection
+  incentive(filter: ModelIncentiveFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelIncentiveConnection
+  tariff(filter: ModelTariffFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTariffConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type UtilityZone {
+  id: ID!
+  zoneID: ID!
+  zone: Zone!
+  utilityID: ID!
+  utility: Utility!
+  certification(certificationID: ModelIDKeyConditionInput, filter: ModelCertification_UtilityZoneFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCertification_UtilityZoneConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Query {
+  getIeccClimateZone(lat: Float!, lon: Float!, kg_zone: String!): AWSJSON
+  manageProjectState(project_id: String): AWSJSON
+  manageEquipmentSpecs(method: String, params: AWSJSON): AWSJSON
+  getZone(id: ID!): Zone
+  listZones(filter: ModelZoneFilterInput, limit: Int, nextToken: String): ModelZoneConnection
+  getUtility(id: ID!): Utility
+  listUtilities(filter: ModelUtilityFilterInput, limit: Int, nextToken: String): ModelUtilityConnection
+  getEquipment(id: ID!): Equipment
+  listEquipment(filter: ModelEquipmentFilterInput, limit: Int, nextToken: String): ModelEquipmentConnection
+  getManufacturer(id: ID!): Manufacturer
+  listManufacturers(filter: ModelManufacturerFilterInput, limit: Int, nextToken: String): ModelManufacturerConnection
+  getSupplier(id: ID!): Supplier
+  listSuppliers(filter: ModelSupplierFilterInput, limit: Int, nextToken: String): ModelSupplierConnection
+  getInstaller(id: ID!): Installer
+  listInstallers(filter: ModelInstallerFilterInput, limit: Int, nextToken: String): ModelInstallerConnection
+  getCertification(id: ID!): Certification
+  listCertifications(filter: ModelCertificationFilterInput, limit: Int, nextToken: String): ModelCertificationConnection
+  getCategory(id: ID!): Category
+  listCategories(filter: ModelCategoryFilterInput, limit: Int, nextToken: String): ModelCategoryConnection
+  getSubcategory(id: ID!): Subcategory
+  listSubcategories(filter: ModelSubcategoryFilterInput, limit: Int, nextToken: String): ModelSubcategoryConnection
+  getEnclosure(id: ID!): Enclosure
+  listEnclosures(filter: ModelEnclosureFilterInput, limit: Int, nextToken: String): ModelEnclosureConnection
+  getIncentive(id: ID!): Incentive
+  listIncentives(filter: ModelIncentiveFilterInput, limit: Int, nextToken: String): ModelIncentiveConnection
+  getDepreciationTable(id: ID!): DepreciationTable
+  listDepreciationTables(filter: ModelDepreciationTableFilterInput, limit: Int, nextToken: String): ModelDepreciationTableConnection
+  getDepreciationEntry(id: ID!): DepreciationEntry
+  listDepreciationEntries(filter: ModelDepreciationEntryFilterInput, limit: Int, nextToken: String): ModelDepreciationEntryConnection
+  getAnswer(id: ID!): Answer
+  listAnswers(filter: ModelAnswerFilterInput, limit: Int, nextToken: String): ModelAnswerConnection
+  getSpecs(id: ID!): Specs
+  listSpecs(filter: ModelSpecsFilterInput, limit: Int, nextToken: String): ModelSpecsConnection
+  getTariff(id: ID!): Tariff
+  listTariffs(filter: ModelTariffFilterInput, limit: Int, nextToken: String): ModelTariffConnection
+  getTierRateEntry(id: ID!): TierRateEntry
+  listTierRateEntries(filter: ModelTierRateEntryFilterInput, limit: Int, nextToken: String): ModelTierRateEntryConnection
+  getConditionalTierRateEntry(id: ID!): ConditionalTierRateEntry
+  listConditionalTierRateEntries(filter: ModelConditionalTierRateEntryFilterInput, limit: Int, nextToken: String): ModelConditionalTierRateEntryConnection
+  getPowerRateEntry(id: ID!): PowerRateEntry
+  listPowerRateEntries(filter: ModelPowerRateEntryFilterInput, limit: Int, nextToken: String): ModelPowerRateEntryConnection
+  getEnergyTOUEntry(id: ID!): EnergyTOUEntry
+  listEnergyTOUEntries(filter: ModelEnergyTOUEntryFilterInput, limit: Int, nextToken: String): ModelEnergyTOUEntryConnection
+  getFeedInTariffTOUEntry(id: ID!): FeedInTariffTOUEntry
+  listFeedInTariffTOUEntries(filter: ModelFeedInTariffTOUEntryFilterInput, limit: Int, nextToken: String): ModelFeedInTariffTOUEntryConnection
+  getPowerTOUEntry(id: ID!): PowerTOUEntry
+  listPowerTOUEntries(filter: ModelPowerTOUEntryFilterInput, limit: Int, nextToken: String): ModelPowerTOUEntryConnection
+  getProject(id: ID!): Project @aws_iam @aws_cognito_user_pools
+  listProjects(filter: ModelProjectFilterInput, limit: Int, nextToken: String): ModelProjectConnection @aws_iam @aws_cognito_user_pools
+}
+
+enum Categories {
+  BATTERY
+  CONTROLLER
+  EV_CHARGER
+  INVERTER
+  INVERTER_CHARGER
+  HYBRID_INVERTER
+  MPPT
+  RAPID_SHUTDOWN
+  SOLAR_PANEL
+}
+
+enum Subcategories {
+  SOFTWARE
+  HARDWARE
+  LEVEL_2
+  RECEIVER
+  TRANSMITTER
+  LFP
+  ROOFTOP
+  GROUNDMOUNT
+  ONE_PHASE
+  THREE_PHASES
+  CENTRAL
+  STRING_3_PHASES
+  STRING_1_PHASE
+  BIFACIAL
+  POLYCRISTALLINE
+  MONOCRISTALLINE
+  LITHIUM_ION
+  MONOCRYSTALLIN
+}
+
+enum CurrencyType {
+  CAD
+  USD
+}
+
+enum Usage {
+  Indoor
+  Outdoor
+  Submersible
+  Explosion_proof
+}
+
+type Equipment {
+  id: ID!
+  description: String
+  url: AWSURL
+  specsID: ID!
+  specs: Specs
+  notes: String
+  sps_name: String!
+  is_active: Boolean
+  categoryID: ID!
+  category: Category
+  subcategoryID: ID!
+  subcategory: Subcategory
+  manufacturerID: ID!
+  manufacturer: Manufacturer
+  supplier(supplierID: ModelIDKeyConditionInput, filter: ModelEquipmentSupplierFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEquipmentSupplierConnection
+  installer(installerID: ModelIDKeyConditionInput, filter: ModelEquipmentInstallerFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEquipmentInstallerConnection
+  certification(certificationID: ModelIDKeyConditionInput, filter: ModelEquipmentCertificationFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEquipmentCertificationConnection
+  enclosure(enclosureID: ModelIDKeyConditionInput, filter: ModelEquipmentEnclosureFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEquipmentEnclosureConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Manufacturer {
+  id: ID!
+  name: String!
+  equipment(filter: ModelEquipmentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEquipmentConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Supplier {
+  id: ID!
+  equipment(equipmentID: ModelIDKeyConditionInput, filter: ModelEquipmentSupplierFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEquipmentSupplierConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type EquipmentSupplier {
+  id: ID!
+  equipmentID: ID!
+  equipment: Equipment!
+  supplier_item_id: ID!
+  cost: Float!
+  currency: CurrencyType!
+  supplierID: ID!
+  supplier: Supplier!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Installer {
+  id: ID!
+  equipment(equipmentID: ModelIDKeyConditionInput, filter: ModelEquipmentInstallerFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEquipmentInstallerConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type EquipmentInstaller {
+  id: ID!
+  equipmentID: ID!
+  equipment: Equipment!
+  is_available: Boolean
+  cost: Float!
+  currency: CurrencyType!
+  installerID: ID!
+  installer: Installer!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Certification {
+  id: ID!
+  type: String!
+  certifyingEntity: String!
+  certificationDate: AWSDate!
+  edition: String!
+  zone(zoneID: ModelIDKeyConditionInput, filter: ModelCertificationZoneFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCertificationZoneConnection
+  equipment(equipmentID: ModelIDKeyConditionInput, filter: ModelEquipmentCertificationFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEquipmentCertificationConnection
+  utilityZone(utilityZoneID: ModelIDKeyConditionInput, filter: ModelCertification_UtilityZoneFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCertification_UtilityZoneConnection
+  category(categoryID: ModelIDKeyConditionInput, filter: ModelCategoryCertificationFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCategoryCertificationConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type EquipmentCertification {
+  id: ID!
+  equipmentID: ID!
+  equipment: Equipment!
+  certificationID: ID!
+  certification: Installer!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type CertificationZone {
+  id: ID!
+  zoneID: ID!
+  zone: Zone!
+  certificationID: ID!
+  certification: Certification!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Certification_UtilityZone {
+  id: ID!
+  utilityZoneID: ID!
+  utilityZone: UtilityZone!
+  certificationID: ID!
+  certification: Certification!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type CategoryCertification {
+  id: ID!
+  certificationID: ID!
+  certification: Certification!
+  categoryID: ID!
+  category: Category!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Category {
+  id: ID!
+  name: Categories!
+  subcategory(filter: ModelSubcategoryFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelSubcategoryConnection
+  equipment(filter: ModelEquipmentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEquipmentConnection
+  certification(certificationID: ModelIDKeyConditionInput, filter: ModelCategoryCertificationFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCategoryCertificationConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Subcategory {
+  id: ID!
+  name: Subcategories!
+  categoryID: ID!
+  category: Category
+  equipment(filter: ModelEquipmentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEquipmentConnection
+  depreciation_table(filter: ModelDepreciationTableFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelDepreciationTableConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Enclosure {
+  id: ID!
+  NEMA: String!
+  IP: String
+  description: String!
+  usage1: Usage!
+  usage2: Usage
+  equipment(equipmentID: ModelIDKeyConditionInput, filter: ModelEquipmentEnclosureFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEquipmentEnclosureConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type EquipmentEnclosure {
+  id: ID!
+  equipmentID: ID!
+  equipment: Equipment!
+  enclosureID: ID!
+  enclosure: Enclosure!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+enum IncentiveType {
+  Production_Based_Incentive
+  System_Cost_Incentive
+  System_Size_Incentive
+  Fixed_Amount_Incentive
+  Equipment_Depreciation
+  EV_Charging_Stations
+}
+
+enum PowerBase {
+  DC_system_size_at_standard_test_conditions
+  DC_system_size_at_Performance_test_condition
+  AC_system_size
+}
+
+type Incentive {
+  id: ID!
+  project(projectID: ModelIDKeyConditionInput, filter: ModelProjectIncentiveFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelProjectIncentiveConnection
+  type: IncentiveType!
+  name: String!
+  zone(zoneID: ModelIDKeyConditionInput, filter: ModelIncentiveZoneFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelIncentiveZoneConnection
+  utilityID: ID!
+  utility: Utility
+  last_updated: AWSDateTime!
+  is_cumulative: Boolean!
+  pbi_rate: Float
+  pbi_variation: Float
+  pbi_duration: Int
+  pbi_cap_value: Float
+  sci_installation_cost_included: Boolean
+  sci_storage_cost_included: Boolean
+  sci_solar_pv_cost_included: Boolean
+  sci_inverter_cost_included: Boolean
+  sci_disconnect_switch_and_other_cost_included: Boolean
+  sci_amount: Float
+  sci_cap: Float
+  sci_incentive_type: Boolean
+  ssi_power_base: String
+  ssi_amount: Float
+  ssi_cap: Float
+  ssi_tax_rate: Float
+  fai_amount: Float
+  fai_tax_rate: Float
+  ed_incentive_value: Float
+  ed_percentage_eligible: Float
+  ed_taxe_rate: Float
+  ed_depreciation_table(depreciationTableID: ModelIDKeyConditionInput, filter: ModelDepreciationTable_IncentiveFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelDepreciationTable_IncentiveConnection
+  evcs_amount_install: Float
+  evcs_amount_hw: Float
+  evcs_cap: Float
+  evcs_fixed_amount: Float
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type ProjectIncentive {
+  id: ID!
+  projectID: ID!
+  incentiveID: ID!
+  incentive: Incentive!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  project: Project! @aws_iam @aws_cognito_user_pools
+}
+
+type IncentiveZone {
+  id: ID!
+  zoneID: ID!
+  zone: Zone!
+  incentiveID: ID!
+  incentive: Incentive!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type DepreciationTable {
+  id: ID!
+  subcategoryID: ID!
+  subcategory: Subcategory
+  zoneID: ID!
+  zone: Zone
+  depreciationEntryID: ID!
+  depreciationEntry: DepreciationEntry
+  incentive(incentiveID: ModelIDKeyConditionInput, filter: ModelDepreciationTable_IncentiveFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelDepreciationTable_IncentiveConnection
+  depreciation_type: Boolean!
+  depreciation_straigth_line_yrs: Int!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type DepreciationEntry {
+  id: ID!
+  year: Int!
+  depreciation_percentage_1: Float!
+  depreciation_percentage_2_25: Float!
+  depreciation_table(filter: ModelDepreciationTableFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelDepreciationTableConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type DepreciationTable_Incentive {
+  id: ID!
+  depreciationTableID: ID!
+  depreciationTable: DepreciationTable!
+  incentiveID: ID!
+  incentive: Incentive!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+enum ProjectType {
+  SINGLE_BUILDING
+  LOAD_REPLACEMENT
+}
+
+enum ProjectStatus {
+  QUESTIONNAIRE_IN_PROGRESS
+  QUESTIONNAIRE_COMPLETED
+  SIMULATION_IN_PROGRESS
+  SIMULATION_COMPLETED
+  FEASIBILITY_ANALYSIS_RECEIVED
+}
+
+type Project @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  type: ProjectType!
+  status: ProjectStatus!
+  history: [String]
+  location: Location
+  answer(filter: ModelAnswerFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelAnswerConnection
+  incentive(incentiveID: ModelIDKeyConditionInput, filter: ModelProjectIncentiveFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelProjectIncentiveConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+type Answer {
+  id: ID!
+  question_title: AWSJSON!
+  question_key: String!
+  input_type: String!
+  answer: AWSJSON!
+  answer_metadata: AWSJSON!
+  projectID: ID!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  project: Project @aws_iam @aws_cognito_user_pools
+}
+
+enum ChemestryCompatibility {
+  Lithium_Ion
+  Lithium_Ion_FLP
+  Lead_Acid_ADM
+  Lead_Acid_Gel
+}
+
+enum Applications {
+  V2B
+  Dumb_charge
+  Smart_charge
+  Heila_compatible
+  Other
+}
+
+enum VoltageConnections {
+  MONO_120_240V_split_phase
+  MONO_120V
+  MONO_240V
+  TRI_120_208V
+  TRI_347_600V
+  TRI_240V
+  TRI_480V
+  TRI_277_480V
+  TRI_600V
+  TRI_400V
+  TRI_127_220V
+  TRI_440V
+}
+
+enum Frequency {
+  Hz_50
+  Hz_60
+}
+
+type BatterySpecs {
+  id: ID!
+  lifetime_cycle: Int!
+  lifetime_calendar: Int!
+  lifetime_cycle_dod: Float!
+  bess_chemestry_compatibility_1: ChemestryCompatibility!
+  bess_chemestry_compatibility_2: ChemestryCompatibility
+  bess_chemestry_compatibility_3: ChemestryCompatibility
+  bess_chemestry_compatibility_4: ChemestryCompatibility
+  mean_efficiency: Float!
+  max_charge: Float!
+  nominal_charge: Float!
+  max_discharge: Float!
+  nominal_discharge: Float!
+  max_voltage: Float!
+  min_voltage: Float!
+  nominal_voltage: Float!
+  rated_Ah: Float!
+  rated_kWh: Float!
+}
+
+type EVChargerSpecs {
+  id: ID!
+  lifetime_warranty: Int!
+  applications: Applications!
+  applications_other: String
+  port_NB: Int!
+  max_power_per_port_kW: Float!
+  voltage_connections_main: VoltageConnections!
+  voltage_connections_secondary: VoltageConnections
+}
+
+type InverterSpecs {
+  id: ID!
+  max_power_kW: Float!
+  nominal_power_kw: Float!
+  peak_current: Float!
+  peak_duration_seconds: Int!
+  breaker_size: Int!
+  max_continuous_current: Float!
+  phases_NB: Int!
+  voltage_connections_main: VoltageConnections!
+  voltage_connections_secondary: VoltageConnections
+  frequency: Frequency!
+  active_frequency_shift_curtailment: Boolean!
+  MPPT_NB: Int!
+  max_power_per_MPPT_kW: Float!
+  max_MPPT1: Float!
+  max_MPPT2: Float
+  max_MPPT3: Float
+  max_MPPT4: Float
+  max_MPPT5: Float
+  total_max: Float!
+  usable_MPPT1: Float!
+  usable_MPPT2: Float
+  usable_MPPT3: Float
+  usable_MPPT4: Float
+  usable_MPPT5: Float
+  MPPT_max_voltage: Float!
+  MPPT_min_voltage: Float!
+  nominal_voltage: Float!
+  total_max_voltage: Float!
+  operating_max_voltage: Float!
+  operating_min_voltage: Float!
+  internal: Boolean!
+  string_number_limitation: Int!
+  current_limitation: Float!
+  lifetime_warranty: Int!
+  grid_forming: Boolean!
+  CEC_efficiency: Float!
+  MAX_efficiency: Float!
+}
+
+type InverterChargerSpecs {
+  id: ID!
+  lifetime_warranty: Int!
+  grid_forming: Boolean!
+  UPS_function: Boolean!
+  nominal_charge: Float!
+  nominal_discharge: Float!
+  max_charge: Float!
+  max_discharge: Float!
+  max_voltage_DC: Float!
+  min_voltage_DC: Float!
+  nominal_voltage_DC: Float!
+  bess_chemestry_compatibility_1: ChemestryCompatibility!
+  bess_chemestry_compatibility_2: ChemestryCompatibility
+  bess_chemestry_compatibility_3: ChemestryCompatibility
+  bess_chemestry_compatibility_4: ChemestryCompatibility
+  efficiency: Float!
+  nominal_power_kw: Float!
+  peak_current: Float!
+  nominal_current: Float!
+  voltage_connections_main: VoltageConnections!
+  voltage_connections_secondary: VoltageConnections
+  max_voltage_AC: Float!
+  min_voltage_AC: Float!
+  nominal_voltage_AC: Float!
+  frequency: Frequency!
+}
+
+type HybridInverterSpecs {
+  id: ID!
+  lifetime: Int!
+  voltage_connections_main: VoltageConnections!
+  voltage_connections_secondary: VoltageConnections
+  grid_forming: Boolean!
+  external_MPPT: Boolean!
+  stacking_limit: Int!
+  thee_phase_stacking: Int!
+  UPS_function: Boolean!
+  efficiency_AC: Float!
+  nominal_power_kw: Float!
+  peak_current: Float!
+  nominal_current: Float!
+  frequency: Frequency!
+  active_frequency_shift_curtailment: Boolean!
+  MPPT_NB: Int!
+  max_power_per_MPPT_kW: Float!
+  max_MPPT1: Float!
+  max_MPPT2: Float
+  max_MPPT3: Float
+  max_MPPT4: Float
+  max_MPPT5: Float
+  total_max: Float!
+  usable_MPPT1: Float!
+  usable_MPPT2: Float
+  usable_MPPT3: Float
+  usable_MPPT4: Float
+  usable_MPPT5: Float
+  MPPT_max_voltage: Float!
+  MPPT_min_voltage: Float!
+  MPPT_nominal_voltage: Float!
+  total_max_voltage: Float!
+  operating_max_voltage: Float!
+  operating_min_voltage: Float!
+  internal: Boolean!
+  string_number_limitation: Int!
+  current_limitation: Float!
+  nominal_charge: Float!
+  nominal_discharge: Float!
+  max_voltage: Float!
+  min_voltage: Float!
+  nominal_voltage: Float!
+  bess_chemestry_compatibility_1: ChemestryCompatibility!
+  bess_chemestry_compatibility_2: ChemestryCompatibility
+  bess_chemestry_compatibility_3: ChemestryCompatibility
+  bess_chemestry_compatibility_4: ChemestryCompatibility
+  efficiency_DC: Float!
+  max_capacity_kWh: Float!
+  min_capacity_kWh: Float!
+}
+
+type MPPTSpecs {
+  id: ID!
+  MPPT_NB: Int!
+  max_power_per_MPPT_kW: Float!
+  max_MPPT1: Float!
+  max_MPPT2: Float
+  max_MPPT3: Float
+  max_MPPT4: Float
+  max_MPPT5: Float
+  total_max: Float!
+  usable_MPPT1: Float!
+  usable_MPPT2: Float
+  usable_MPPT3: Float
+  usable_MPPT4: Float
+  usable_MPPT5: Float
+  MPPT_max_voltage: Float!
+  MPPT_min_voltage: Float!
+  nominal_voltage: Float!
+  total_max_voltage: Float!
+  operating_max_voltage: Float!
+  operating_min_voltage: Float!
+  internal: Boolean!
+  string_number_limitation: Int!
+  current_limitation: Float!
+  lifetime_warranty: Int!
+  grid_forming: Boolean!
+}
+
+type SolarPanelSpecs {
+  id: ID!
+  lifetime_warranty: Int!
+  width_m: Float!
+  length_m: Float!
+  thickness_mm: Float!
+  is_bifacial: Boolean!
+  IMP: Float!
+  ISC: Float!
+  VMP: Float!
+  VOC: Float!
+  NOCT: Int!
+  NCell: Int!
+  efficiency: Float!
+  bifaial_gain: Float!
+  temp_coeff_Isc: Float!
+  temp_coeff_Voc: Float!
+  temp_coeff_Pmax: Float!
+  rated_power_stc_W: Float!
+}
+
+type Specs {
+  id: ID!
+  equipment(filter: ModelEquipmentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEquipmentConnection
+  batterySpecs: BatterySpecs
+  evChargerSpecs: EVChargerSpecs
+  hybridInverterSpecs: HybridInverterSpecs
+  inverterSpecs: InverterSpecs
+  inverterChargerSpecs: InverterChargerSpecs
+  mpptSpecs: MPPTSpecs
+  solarPanelSpecs: SolarPanelSpecs
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+enum EnergyRateType {
+  Flat_Rate
+  Tiered_Rate_Plan
+  Conditional_Tiered_Rate_Plan
+}
+
+enum PowerRateType {
+  Fixed_Power_Contract
+  Variable_Power_Contract
+}
+
+enum TimePeriod {
+  Yearly
+  Monthly
+  Daily
+  Hourly
+}
+
+enum NetMeteringLimitTypes {
+  AC
+  DC
+  MIN
+  MAX
+  No_Limit
+}
+
+enum Days {
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
+  Weekdays
+  Weekends
+  All
+}
+
+enum Tier {
+  Tier_1
+  Tier_2
+  Tier_3
+  Tier_4
+  Tier_5
+  Balance
+}
+
+enum BuildingType {
+  Office
+  Education
+  Hospital
+  Lodging_Residential
+  Warehouse
+  Stand_alone_retail
+  Strip_mall
+  Restaurant
+  Supermarket
+  Entertainment_public_assembly
+  Public_services
+}
+
+enum PhaseType {
+  One_Phase
+  Three_Phase
+  Both_Phases
+}
+
+enum Unit {
+  kW
+  kVa
+}
+
+type Tariff {
+  id: ID!
+  name: String!
+  zone(zoneID: ModelIDKeyConditionInput, filter: ModelTariffZoneFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTariffZoneConnection
+  utilityID: ID!
+  utility: Utility
+  last_updated: AWSDateTime!
+  notes: String!
+  max_energy_consumption_kWh: Float
+  max_energy_consumption_period: TimePeriod
+  max_demand_power_peak: Float
+  max_demand_unit: Unit
+  max_demand_period: TimePeriod
+  min_demand_power_peak: Float
+  min_demand_unit: Unit
+  min_demand_period: TimePeriod
+  energy_rate_type: EnergyRateType!
+  flat_rate: Float
+  base_rate: Float
+  tierRateEntry(filter: ModelTierRateEntryFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTierRateEntryConnection
+  capacity_per_period: TimePeriod
+  conditionalTierRateEntry(filter: ModelConditionalTierRateEntryFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelConditionalTierRateEntryConnection
+  has_net_metering_program: Boolean!
+  net_metering_limit: Float
+  net_metering_limit_type: NetMeteringLimitTypes
+  has_feed_in_program: Boolean!
+  sellback_rate: Float
+  has_tou_feed_in: Boolean!
+  feedInTariffTOUEntry(filter: ModelFeedInTariffTOUEntryFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelFeedInTariffTOUEntryConnection
+  has_tou_pricing: Boolean!
+  energyTOUEntry(filter: ModelEnergyTOUEntryFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEnergyTOUEntryConnection
+  has_base_price_WE: Boolean!
+  power_rate_type: PowerRateType!
+  has_fixed_power_contracct: Boolean!
+  power_contract_rate: Float
+  above_kW: Float
+  has_variable_pricing: Boolean!
+  powerRateEntry(filter: ModelPowerRateEntryFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPowerRateEntryConnection
+  has_tou_power_pricing: Boolean!
+  powerTOUEntry(filter: ModelPowerTOUEntryFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPowerTOUEntryConnection
+  has_lesser_of_pricing: Boolean!
+  lesser_of_kW: Float
+  lesser_of_kWh: Float
+  has_power_demand_peak_exceeding_pricing: Boolean!
+  period_not_to_exceed: TimePeriod
+  max_power_per_period: Float
+  rate_after_exceeded: Tier
+  has_yr_per_yr_dynamic_pwr_contract: Boolean!
+  has_flat_charge: Boolean!
+  flat_charge_period: TimePeriod
+  flat_charge_amount: Float
+  has_variable_charge: Boolean!
+  installation_power_value: Float!
+  electric_consumption: Float!
+  rebate_percentage: Float!
+  tax_surcharge_percentage: Float!
+  has_demand_response: Boolean!
+  demand_response_rate_kWh: Float!
+  credit_price_kW: Float!
+  interconnection_limit: Float!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type TariffZone {
+  id: ID!
+  zoneID: ID!
+  zone: Zone!
+  tariffID: ID!
+  tariff: Tariff!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type TierRateEntry {
+  id: ID!
+  tariffID: ID!
+  tariff(filter: ModelTariffFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTariffConnection
+  max_kwh: Float!
+  rate: Float!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type ConditionalTierRateEntry {
+  id: ID!
+  tariffID: ID!
+  tariff(filter: ModelTariffFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTariffConnection
+  max_kwh: Float!
+  mumber_of_days_in_month: Int!
+  rate: Float!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type PowerRateEntry {
+  id: ID!
+  tariffID: ID!
+  tariff(filter: ModelTariffFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTariffConnection
+  min_kWh: Float!
+  max_kWh: Float!
+  rate: Float!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type EnergyTOUEntry {
+  id: ID!
+  tariffID: ID!
+  tariff(filter: ModelTariffFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTariffConnection
+  rate: Float!
+  starting_hour: AWSTime!
+  ending_hour: AWSTime!
+  days: Days!
+  start_date: AWSDate!
+  end_date: AWSDate!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type FeedInTariffTOUEntry {
+  id: ID!
+  tariffID: ID!
+  tariff(filter: ModelTariffFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTariffConnection
+  rate: Float!
+  starting_hour: AWSTime!
+  ending_hour: AWSTime!
+  days: Days!
+  start_date: AWSDate!
+  end_date: AWSDate!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type PowerTOUEntry {
+  id: ID!
+  tariffID: ID!
+  tariff(filter: ModelTariffFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTariffConnection
+  rate: Float!
+  starting_hour: AWSTime!
+  ending_hour: AWSTime!
+  days: Days!
+  start_date: AWSDate!
+  end_date: AWSDate!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelZoneConnection {
+  items: [Zone]
+  nextToken: String
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+input ModelZoneFilterInput {
+  id: ModelIDInput
+  geo_zone: ModelStringInput
+  and: [ModelZoneFilterInput]
+  or: [ModelZoneFilterInput]
+  not: ModelZoneFilterInput
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+input CreateZoneInput {
+  id: ID
+  geo_zone: AWSJSON
+}
+
+input UpdateZoneInput {
+  id: ID!
+  geo_zone: AWSJSON
+}
+
+input DeleteZoneInput {
+  id: ID!
+}
+
+type Mutation {
+  createZone(input: CreateZoneInput!, condition: ModelZoneConditionInput): Zone
+  updateZone(input: UpdateZoneInput!, condition: ModelZoneConditionInput): Zone
+  deleteZone(input: DeleteZoneInput!, condition: ModelZoneConditionInput): Zone
+  createUtility(input: CreateUtilityInput!, condition: ModelUtilityConditionInput): Utility
+  updateUtility(input: UpdateUtilityInput!, condition: ModelUtilityConditionInput): Utility
+  deleteUtility(input: DeleteUtilityInput!, condition: ModelUtilityConditionInput): Utility
+  createUtilityZone(input: CreateUtilityZoneInput!, condition: ModelUtilityZoneConditionInput): UtilityZone
+  updateUtilityZone(input: UpdateUtilityZoneInput!, condition: ModelUtilityZoneConditionInput): UtilityZone
+  deleteUtilityZone(input: DeleteUtilityZoneInput!, condition: ModelUtilityZoneConditionInput): UtilityZone
+  createEquipment(input: CreateEquipmentInput!, condition: ModelEquipmentConditionInput): Equipment
+  updateEquipment(input: UpdateEquipmentInput!, condition: ModelEquipmentConditionInput): Equipment
+  deleteEquipment(input: DeleteEquipmentInput!, condition: ModelEquipmentConditionInput): Equipment
+  createManufacturer(input: CreateManufacturerInput!, condition: ModelManufacturerConditionInput): Manufacturer
+  updateManufacturer(input: UpdateManufacturerInput!, condition: ModelManufacturerConditionInput): Manufacturer
+  deleteManufacturer(input: DeleteManufacturerInput!, condition: ModelManufacturerConditionInput): Manufacturer
+  createSupplier(input: CreateSupplierInput!, condition: ModelSupplierConditionInput): Supplier
+  updateSupplier(input: UpdateSupplierInput!, condition: ModelSupplierConditionInput): Supplier
+  deleteSupplier(input: DeleteSupplierInput!, condition: ModelSupplierConditionInput): Supplier
+  createEquipmentSupplier(input: CreateEquipmentSupplierInput!, condition: ModelEquipmentSupplierConditionInput): EquipmentSupplier
+  updateEquipmentSupplier(input: UpdateEquipmentSupplierInput!, condition: ModelEquipmentSupplierConditionInput): EquipmentSupplier
+  deleteEquipmentSupplier(input: DeleteEquipmentSupplierInput!, condition: ModelEquipmentSupplierConditionInput): EquipmentSupplier
+  createInstaller(input: CreateInstallerInput!, condition: ModelInstallerConditionInput): Installer
+  updateInstaller(input: UpdateInstallerInput!, condition: ModelInstallerConditionInput): Installer
+  deleteInstaller(input: DeleteInstallerInput!, condition: ModelInstallerConditionInput): Installer
+  createEquipmentInstaller(input: CreateEquipmentInstallerInput!, condition: ModelEquipmentInstallerConditionInput): EquipmentInstaller
+  updateEquipmentInstaller(input: UpdateEquipmentInstallerInput!, condition: ModelEquipmentInstallerConditionInput): EquipmentInstaller
+  deleteEquipmentInstaller(input: DeleteEquipmentInstallerInput!, condition: ModelEquipmentInstallerConditionInput): EquipmentInstaller
+  createCertification(input: CreateCertificationInput!, condition: ModelCertificationConditionInput): Certification
+  updateCertification(input: UpdateCertificationInput!, condition: ModelCertificationConditionInput): Certification
+  deleteCertification(input: DeleteCertificationInput!, condition: ModelCertificationConditionInput): Certification
+  createEquipmentCertification(input: CreateEquipmentCertificationInput!, condition: ModelEquipmentCertificationConditionInput): EquipmentCertification
+  updateEquipmentCertification(input: UpdateEquipmentCertificationInput!, condition: ModelEquipmentCertificationConditionInput): EquipmentCertification
+  deleteEquipmentCertification(input: DeleteEquipmentCertificationInput!, condition: ModelEquipmentCertificationConditionInput): EquipmentCertification
+  createCertificationZone(input: CreateCertificationZoneInput!, condition: ModelCertificationZoneConditionInput): CertificationZone
+  updateCertificationZone(input: UpdateCertificationZoneInput!, condition: ModelCertificationZoneConditionInput): CertificationZone
+  deleteCertificationZone(input: DeleteCertificationZoneInput!, condition: ModelCertificationZoneConditionInput): CertificationZone
+  createCertification_UtilityZone(input: CreateCertification_UtilityZoneInput!, condition: ModelCertification_UtilityZoneConditionInput): Certification_UtilityZone
+  updateCertification_UtilityZone(input: UpdateCertification_UtilityZoneInput!, condition: ModelCertification_UtilityZoneConditionInput): Certification_UtilityZone
+  deleteCertification_UtilityZone(input: DeleteCertification_UtilityZoneInput!, condition: ModelCertification_UtilityZoneConditionInput): Certification_UtilityZone
+  createCategoryCertification(input: CreateCategoryCertificationInput!, condition: ModelCategoryCertificationConditionInput): CategoryCertification
+  updateCategoryCertification(input: UpdateCategoryCertificationInput!, condition: ModelCategoryCertificationConditionInput): CategoryCertification
+  deleteCategoryCertification(input: DeleteCategoryCertificationInput!, condition: ModelCategoryCertificationConditionInput): CategoryCertification
+  createCategory(input: CreateCategoryInput!, condition: ModelCategoryConditionInput): Category
+  updateCategory(input: UpdateCategoryInput!, condition: ModelCategoryConditionInput): Category
+  deleteCategory(input: DeleteCategoryInput!, condition: ModelCategoryConditionInput): Category
+  createSubcategory(input: CreateSubcategoryInput!, condition: ModelSubcategoryConditionInput): Subcategory
+  updateSubcategory(input: UpdateSubcategoryInput!, condition: ModelSubcategoryConditionInput): Subcategory
+  deleteSubcategory(input: DeleteSubcategoryInput!, condition: ModelSubcategoryConditionInput): Subcategory
+  createEnclosure(input: CreateEnclosureInput!, condition: ModelEnclosureConditionInput): Enclosure
+  updateEnclosure(input: UpdateEnclosureInput!, condition: ModelEnclosureConditionInput): Enclosure
+  deleteEnclosure(input: DeleteEnclosureInput!, condition: ModelEnclosureConditionInput): Enclosure
+  createEquipmentEnclosure(input: CreateEquipmentEnclosureInput!, condition: ModelEquipmentEnclosureConditionInput): EquipmentEnclosure
+  updateEquipmentEnclosure(input: UpdateEquipmentEnclosureInput!, condition: ModelEquipmentEnclosureConditionInput): EquipmentEnclosure
+  deleteEquipmentEnclosure(input: DeleteEquipmentEnclosureInput!, condition: ModelEquipmentEnclosureConditionInput): EquipmentEnclosure
+  createIncentive(input: CreateIncentiveInput!, condition: ModelIncentiveConditionInput): Incentive
+  updateIncentive(input: UpdateIncentiveInput!, condition: ModelIncentiveConditionInput): Incentive
+  deleteIncentive(input: DeleteIncentiveInput!, condition: ModelIncentiveConditionInput): Incentive
+  createProjectIncentive(input: CreateProjectIncentiveInput!, condition: ModelProjectIncentiveConditionInput): ProjectIncentive
+  updateProjectIncentive(input: UpdateProjectIncentiveInput!, condition: ModelProjectIncentiveConditionInput): ProjectIncentive
+  deleteProjectIncentive(input: DeleteProjectIncentiveInput!, condition: ModelProjectIncentiveConditionInput): ProjectIncentive
+  createIncentiveZone(input: CreateIncentiveZoneInput!, condition: ModelIncentiveZoneConditionInput): IncentiveZone
+  updateIncentiveZone(input: UpdateIncentiveZoneInput!, condition: ModelIncentiveZoneConditionInput): IncentiveZone
+  deleteIncentiveZone(input: DeleteIncentiveZoneInput!, condition: ModelIncentiveZoneConditionInput): IncentiveZone
+  createDepreciationTable(input: CreateDepreciationTableInput!, condition: ModelDepreciationTableConditionInput): DepreciationTable
+  updateDepreciationTable(input: UpdateDepreciationTableInput!, condition: ModelDepreciationTableConditionInput): DepreciationTable
+  deleteDepreciationTable(input: DeleteDepreciationTableInput!, condition: ModelDepreciationTableConditionInput): DepreciationTable
+  createDepreciationEntry(input: CreateDepreciationEntryInput!, condition: ModelDepreciationEntryConditionInput): DepreciationEntry
+  updateDepreciationEntry(input: UpdateDepreciationEntryInput!, condition: ModelDepreciationEntryConditionInput): DepreciationEntry
+  deleteDepreciationEntry(input: DeleteDepreciationEntryInput!, condition: ModelDepreciationEntryConditionInput): DepreciationEntry
+  createDepreciationTable_Incentive(input: CreateDepreciationTable_IncentiveInput!, condition: ModelDepreciationTable_IncentiveConditionInput): DepreciationTable_Incentive
+  updateDepreciationTable_Incentive(input: UpdateDepreciationTable_IncentiveInput!, condition: ModelDepreciationTable_IncentiveConditionInput): DepreciationTable_Incentive
+  deleteDepreciationTable_Incentive(input: DeleteDepreciationTable_IncentiveInput!, condition: ModelDepreciationTable_IncentiveConditionInput): DepreciationTable_Incentive
+  createAnswer(input: CreateAnswerInput!, condition: ModelAnswerConditionInput): Answer
+  updateAnswer(input: UpdateAnswerInput!, condition: ModelAnswerConditionInput): Answer
+  deleteAnswer(input: DeleteAnswerInput!, condition: ModelAnswerConditionInput): Answer
+  createSpecs(input: CreateSpecsInput!, condition: ModelSpecsConditionInput): Specs
+  updateSpecs(input: UpdateSpecsInput!, condition: ModelSpecsConditionInput): Specs
+  deleteSpecs(input: DeleteSpecsInput!, condition: ModelSpecsConditionInput): Specs
+  createTariff(input: CreateTariffInput!, condition: ModelTariffConditionInput): Tariff
+  updateTariff(input: UpdateTariffInput!, condition: ModelTariffConditionInput): Tariff
+  deleteTariff(input: DeleteTariffInput!, condition: ModelTariffConditionInput): Tariff
+  createTariffZone(input: CreateTariffZoneInput!, condition: ModelTariffZoneConditionInput): TariffZone
+  updateTariffZone(input: UpdateTariffZoneInput!, condition: ModelTariffZoneConditionInput): TariffZone
+  deleteTariffZone(input: DeleteTariffZoneInput!, condition: ModelTariffZoneConditionInput): TariffZone
+  createTierRateEntry(input: CreateTierRateEntryInput!, condition: ModelTierRateEntryConditionInput): TierRateEntry
+  updateTierRateEntry(input: UpdateTierRateEntryInput!, condition: ModelTierRateEntryConditionInput): TierRateEntry
+  deleteTierRateEntry(input: DeleteTierRateEntryInput!, condition: ModelTierRateEntryConditionInput): TierRateEntry
+  createConditionalTierRateEntry(input: CreateConditionalTierRateEntryInput!, condition: ModelConditionalTierRateEntryConditionInput): ConditionalTierRateEntry
+  updateConditionalTierRateEntry(input: UpdateConditionalTierRateEntryInput!, condition: ModelConditionalTierRateEntryConditionInput): ConditionalTierRateEntry
+  deleteConditionalTierRateEntry(input: DeleteConditionalTierRateEntryInput!, condition: ModelConditionalTierRateEntryConditionInput): ConditionalTierRateEntry
+  createPowerRateEntry(input: CreatePowerRateEntryInput!, condition: ModelPowerRateEntryConditionInput): PowerRateEntry
+  updatePowerRateEntry(input: UpdatePowerRateEntryInput!, condition: ModelPowerRateEntryConditionInput): PowerRateEntry
+  deletePowerRateEntry(input: DeletePowerRateEntryInput!, condition: ModelPowerRateEntryConditionInput): PowerRateEntry
+  createEnergyTOUEntry(input: CreateEnergyTOUEntryInput!, condition: ModelEnergyTOUEntryConditionInput): EnergyTOUEntry
+  updateEnergyTOUEntry(input: UpdateEnergyTOUEntryInput!, condition: ModelEnergyTOUEntryConditionInput): EnergyTOUEntry
+  deleteEnergyTOUEntry(input: DeleteEnergyTOUEntryInput!, condition: ModelEnergyTOUEntryConditionInput): EnergyTOUEntry
+  createFeedInTariffTOUEntry(input: CreateFeedInTariffTOUEntryInput!, condition: ModelFeedInTariffTOUEntryConditionInput): FeedInTariffTOUEntry
+  updateFeedInTariffTOUEntry(input: UpdateFeedInTariffTOUEntryInput!, condition: ModelFeedInTariffTOUEntryConditionInput): FeedInTariffTOUEntry
+  deleteFeedInTariffTOUEntry(input: DeleteFeedInTariffTOUEntryInput!, condition: ModelFeedInTariffTOUEntryConditionInput): FeedInTariffTOUEntry
+  createPowerTOUEntry(input: CreatePowerTOUEntryInput!, condition: ModelPowerTOUEntryConditionInput): PowerTOUEntry
+  updatePowerTOUEntry(input: UpdatePowerTOUEntryInput!, condition: ModelPowerTOUEntryConditionInput): PowerTOUEntry
+  deletePowerTOUEntry(input: DeletePowerTOUEntryInput!, condition: ModelPowerTOUEntryConditionInput): PowerTOUEntry
+  createProject(input: CreateProjectInput!, condition: ModelProjectConditionInput): Project @aws_iam @aws_cognito_user_pools
+  updateProject(input: UpdateProjectInput!, condition: ModelProjectConditionInput): Project @aws_iam @aws_cognito_user_pools
+  deleteProject(input: DeleteProjectInput!, condition: ModelProjectConditionInput): Project @aws_iam @aws_cognito_user_pools
+}
+
+input ModelZoneConditionInput {
+  geo_zone: ModelStringInput
+  and: [ModelZoneConditionInput]
+  or: [ModelZoneConditionInput]
+  not: ModelZoneConditionInput
+}
+
+type Subscription {
+  onCreateZone: Zone @aws_subscribe(mutations: ["createZone"])
+  onUpdateZone: Zone @aws_subscribe(mutations: ["updateZone"])
+  onDeleteZone: Zone @aws_subscribe(mutations: ["deleteZone"])
+  onCreateUtility: Utility @aws_subscribe(mutations: ["createUtility"])
+  onUpdateUtility: Utility @aws_subscribe(mutations: ["updateUtility"])
+  onDeleteUtility: Utility @aws_subscribe(mutations: ["deleteUtility"])
+  onCreateUtilityZone: UtilityZone @aws_subscribe(mutations: ["createUtilityZone"])
+  onUpdateUtilityZone: UtilityZone @aws_subscribe(mutations: ["updateUtilityZone"])
+  onDeleteUtilityZone: UtilityZone @aws_subscribe(mutations: ["deleteUtilityZone"])
+  onCreateEquipment: Equipment @aws_subscribe(mutations: ["createEquipment"])
+  onUpdateEquipment: Equipment @aws_subscribe(mutations: ["updateEquipment"])
+  onDeleteEquipment: Equipment @aws_subscribe(mutations: ["deleteEquipment"])
+  onCreateManufacturer: Manufacturer @aws_subscribe(mutations: ["createManufacturer"])
+  onUpdateManufacturer: Manufacturer @aws_subscribe(mutations: ["updateManufacturer"])
+  onDeleteManufacturer: Manufacturer @aws_subscribe(mutations: ["deleteManufacturer"])
+  onCreateSupplier: Supplier @aws_subscribe(mutations: ["createSupplier"])
+  onUpdateSupplier: Supplier @aws_subscribe(mutations: ["updateSupplier"])
+  onDeleteSupplier: Supplier @aws_subscribe(mutations: ["deleteSupplier"])
+  onCreateEquipmentSupplier: EquipmentSupplier @aws_subscribe(mutations: ["createEquipmentSupplier"])
+  onUpdateEquipmentSupplier: EquipmentSupplier @aws_subscribe(mutations: ["updateEquipmentSupplier"])
+  onDeleteEquipmentSupplier: EquipmentSupplier @aws_subscribe(mutations: ["deleteEquipmentSupplier"])
+  onCreateInstaller: Installer @aws_subscribe(mutations: ["createInstaller"])
+  onUpdateInstaller: Installer @aws_subscribe(mutations: ["updateInstaller"])
+  onDeleteInstaller: Installer @aws_subscribe(mutations: ["deleteInstaller"])
+  onCreateEquipmentInstaller: EquipmentInstaller @aws_subscribe(mutations: ["createEquipmentInstaller"])
+  onUpdateEquipmentInstaller: EquipmentInstaller @aws_subscribe(mutations: ["updateEquipmentInstaller"])
+  onDeleteEquipmentInstaller: EquipmentInstaller @aws_subscribe(mutations: ["deleteEquipmentInstaller"])
+  onCreateCertification: Certification @aws_subscribe(mutations: ["createCertification"])
+  onUpdateCertification: Certification @aws_subscribe(mutations: ["updateCertification"])
+  onDeleteCertification: Certification @aws_subscribe(mutations: ["deleteCertification"])
+  onCreateEquipmentCertification: EquipmentCertification @aws_subscribe(mutations: ["createEquipmentCertification"])
+  onUpdateEquipmentCertification: EquipmentCertification @aws_subscribe(mutations: ["updateEquipmentCertification"])
+  onDeleteEquipmentCertification: EquipmentCertification @aws_subscribe(mutations: ["deleteEquipmentCertification"])
+  onCreateCertificationZone: CertificationZone @aws_subscribe(mutations: ["createCertificationZone"])
+  onUpdateCertificationZone: CertificationZone @aws_subscribe(mutations: ["updateCertificationZone"])
+  onDeleteCertificationZone: CertificationZone @aws_subscribe(mutations: ["deleteCertificationZone"])
+  onCreateCertification_UtilityZone: Certification_UtilityZone @aws_subscribe(mutations: ["createCertification_UtilityZone"])
+  onUpdateCertification_UtilityZone: Certification_UtilityZone @aws_subscribe(mutations: ["updateCertification_UtilityZone"])
+  onDeleteCertification_UtilityZone: Certification_UtilityZone @aws_subscribe(mutations: ["deleteCertification_UtilityZone"])
+  onCreateCategoryCertification: CategoryCertification @aws_subscribe(mutations: ["createCategoryCertification"])
+  onUpdateCategoryCertification: CategoryCertification @aws_subscribe(mutations: ["updateCategoryCertification"])
+  onDeleteCategoryCertification: CategoryCertification @aws_subscribe(mutations: ["deleteCategoryCertification"])
+  onCreateCategory: Category @aws_subscribe(mutations: ["createCategory"])
+  onUpdateCategory: Category @aws_subscribe(mutations: ["updateCategory"])
+  onDeleteCategory: Category @aws_subscribe(mutations: ["deleteCategory"])
+  onCreateSubcategory: Subcategory @aws_subscribe(mutations: ["createSubcategory"])
+  onUpdateSubcategory: Subcategory @aws_subscribe(mutations: ["updateSubcategory"])
+  onDeleteSubcategory: Subcategory @aws_subscribe(mutations: ["deleteSubcategory"])
+  onCreateEnclosure: Enclosure @aws_subscribe(mutations: ["createEnclosure"])
+  onUpdateEnclosure: Enclosure @aws_subscribe(mutations: ["updateEnclosure"])
+  onDeleteEnclosure: Enclosure @aws_subscribe(mutations: ["deleteEnclosure"])
+  onCreateEquipmentEnclosure: EquipmentEnclosure @aws_subscribe(mutations: ["createEquipmentEnclosure"])
+  onUpdateEquipmentEnclosure: EquipmentEnclosure @aws_subscribe(mutations: ["updateEquipmentEnclosure"])
+  onDeleteEquipmentEnclosure: EquipmentEnclosure @aws_subscribe(mutations: ["deleteEquipmentEnclosure"])
+  onCreateIncentive: Incentive @aws_subscribe(mutations: ["createIncentive"])
+  onUpdateIncentive: Incentive @aws_subscribe(mutations: ["updateIncentive"])
+  onDeleteIncentive: Incentive @aws_subscribe(mutations: ["deleteIncentive"])
+  onCreateProjectIncentive: ProjectIncentive @aws_subscribe(mutations: ["createProjectIncentive"])
+  onUpdateProjectIncentive: ProjectIncentive @aws_subscribe(mutations: ["updateProjectIncentive"])
+  onDeleteProjectIncentive: ProjectIncentive @aws_subscribe(mutations: ["deleteProjectIncentive"])
+  onCreateIncentiveZone: IncentiveZone @aws_subscribe(mutations: ["createIncentiveZone"])
+  onUpdateIncentiveZone: IncentiveZone @aws_subscribe(mutations: ["updateIncentiveZone"])
+  onDeleteIncentiveZone: IncentiveZone @aws_subscribe(mutations: ["deleteIncentiveZone"])
+  onCreateDepreciationTable: DepreciationTable @aws_subscribe(mutations: ["createDepreciationTable"])
+  onUpdateDepreciationTable: DepreciationTable @aws_subscribe(mutations: ["updateDepreciationTable"])
+  onDeleteDepreciationTable: DepreciationTable @aws_subscribe(mutations: ["deleteDepreciationTable"])
+  onCreateDepreciationEntry: DepreciationEntry @aws_subscribe(mutations: ["createDepreciationEntry"])
+  onUpdateDepreciationEntry: DepreciationEntry @aws_subscribe(mutations: ["updateDepreciationEntry"])
+  onDeleteDepreciationEntry: DepreciationEntry @aws_subscribe(mutations: ["deleteDepreciationEntry"])
+  onCreateDepreciationTable_Incentive: DepreciationTable_Incentive @aws_subscribe(mutations: ["createDepreciationTable_Incentive"])
+  onUpdateDepreciationTable_Incentive: DepreciationTable_Incentive @aws_subscribe(mutations: ["updateDepreciationTable_Incentive"])
+  onDeleteDepreciationTable_Incentive: DepreciationTable_Incentive @aws_subscribe(mutations: ["deleteDepreciationTable_Incentive"])
+  onCreateAnswer: Answer @aws_subscribe(mutations: ["createAnswer"])
+  onUpdateAnswer: Answer @aws_subscribe(mutations: ["updateAnswer"])
+  onDeleteAnswer: Answer @aws_subscribe(mutations: ["deleteAnswer"])
+  onCreateSpecs: Specs @aws_subscribe(mutations: ["createSpecs"])
+  onUpdateSpecs: Specs @aws_subscribe(mutations: ["updateSpecs"])
+  onDeleteSpecs: Specs @aws_subscribe(mutations: ["deleteSpecs"])
+  onCreateTariff: Tariff @aws_subscribe(mutations: ["createTariff"])
+  onUpdateTariff: Tariff @aws_subscribe(mutations: ["updateTariff"])
+  onDeleteTariff: Tariff @aws_subscribe(mutations: ["deleteTariff"])
+  onCreateTariffZone: TariffZone @aws_subscribe(mutations: ["createTariffZone"])
+  onUpdateTariffZone: TariffZone @aws_subscribe(mutations: ["updateTariffZone"])
+  onDeleteTariffZone: TariffZone @aws_subscribe(mutations: ["deleteTariffZone"])
+  onCreateTierRateEntry: TierRateEntry @aws_subscribe(mutations: ["createTierRateEntry"])
+  onUpdateTierRateEntry: TierRateEntry @aws_subscribe(mutations: ["updateTierRateEntry"])
+  onDeleteTierRateEntry: TierRateEntry @aws_subscribe(mutations: ["deleteTierRateEntry"])
+  onCreateConditionalTierRateEntry: ConditionalTierRateEntry @aws_subscribe(mutations: ["createConditionalTierRateEntry"])
+  onUpdateConditionalTierRateEntry: ConditionalTierRateEntry @aws_subscribe(mutations: ["updateConditionalTierRateEntry"])
+  onDeleteConditionalTierRateEntry: ConditionalTierRateEntry @aws_subscribe(mutations: ["deleteConditionalTierRateEntry"])
+  onCreatePowerRateEntry: PowerRateEntry @aws_subscribe(mutations: ["createPowerRateEntry"])
+  onUpdatePowerRateEntry: PowerRateEntry @aws_subscribe(mutations: ["updatePowerRateEntry"])
+  onDeletePowerRateEntry: PowerRateEntry @aws_subscribe(mutations: ["deletePowerRateEntry"])
+  onCreateEnergyTOUEntry: EnergyTOUEntry @aws_subscribe(mutations: ["createEnergyTOUEntry"])
+  onUpdateEnergyTOUEntry: EnergyTOUEntry @aws_subscribe(mutations: ["updateEnergyTOUEntry"])
+  onDeleteEnergyTOUEntry: EnergyTOUEntry @aws_subscribe(mutations: ["deleteEnergyTOUEntry"])
+  onCreateFeedInTariffTOUEntry: FeedInTariffTOUEntry @aws_subscribe(mutations: ["createFeedInTariffTOUEntry"])
+  onUpdateFeedInTariffTOUEntry: FeedInTariffTOUEntry @aws_subscribe(mutations: ["updateFeedInTariffTOUEntry"])
+  onDeleteFeedInTariffTOUEntry: FeedInTariffTOUEntry @aws_subscribe(mutations: ["deleteFeedInTariffTOUEntry"])
+  onCreatePowerTOUEntry: PowerTOUEntry @aws_subscribe(mutations: ["createPowerTOUEntry"])
+  onUpdatePowerTOUEntry: PowerTOUEntry @aws_subscribe(mutations: ["updatePowerTOUEntry"])
+  onDeletePowerTOUEntry: PowerTOUEntry @aws_subscribe(mutations: ["deletePowerTOUEntry"])
+  onCreateProject(owner: String): Project @aws_subscribe(mutations: ["createProject"]) @aws_iam @aws_cognito_user_pools
+  onUpdateProject(owner: String): Project @aws_subscribe(mutations: ["updateProject"]) @aws_iam @aws_cognito_user_pools
+  onDeleteProject(owner: String): Project @aws_subscribe(mutations: ["deleteProject"]) @aws_iam @aws_cognito_user_pools
+}
+
+type ModelUtilityConnection {
+  items: [Utility]
+  nextToken: String
+}
+
+input ModelUtilityFilterInput {
+  id: ModelIDInput
+  and: [ModelUtilityFilterInput]
+  or: [ModelUtilityFilterInput]
+  not: ModelUtilityFilterInput
+}
+
+input CreateUtilityInput {
+  id: ID
+}
+
+input UpdateUtilityInput {
+  id: ID!
+}
+
+input DeleteUtilityInput {
+  id: ID!
+}
+
+input ModelUtilityConditionInput {
+  and: [ModelUtilityConditionInput]
+  or: [ModelUtilityConditionInput]
+  not: ModelUtilityConditionInput
+}
+
+input CreateUtilityZoneInput {
+  id: ID
+  zoneID: ID!
+  utilityID: ID!
+}
+
+input UpdateUtilityZoneInput {
+  id: ID!
+  zoneID: ID
+  utilityID: ID
+}
+
+input DeleteUtilityZoneInput {
+  id: ID!
+}
+
+input ModelUtilityZoneConditionInput {
+  zoneID: ModelIDInput
+  utilityID: ModelIDInput
+  and: [ModelUtilityZoneConditionInput]
+  or: [ModelUtilityZoneConditionInput]
+  not: ModelUtilityZoneConditionInput
+}
+
+type ModelEquipmentConnection {
+  items: [Equipment]
+  nextToken: String
+}
+
+input ModelEquipmentFilterInput {
+  id: ModelIDInput
+  description: ModelStringInput
+  url: ModelStringInput
+  specsID: ModelIDInput
+  notes: ModelStringInput
+  sps_name: ModelStringInput
+  is_active: ModelBooleanInput
+  categoryID: ModelIDInput
+  subcategoryID: ModelIDInput
+  manufacturerID: ModelIDInput
+  and: [ModelEquipmentFilterInput]
+  or: [ModelEquipmentFilterInput]
+  not: ModelEquipmentFilterInput
+}
+
+input CreateEquipmentInput {
+  id: ID
+  description: String
+  url: AWSURL
+  specsID: ID!
+  notes: String
+  sps_name: String!
+  is_active: Boolean
+  categoryID: ID!
+  subcategoryID: ID!
+  manufacturerID: ID!
+}
+
+input UpdateEquipmentInput {
+  id: ID!
+  description: String
+  url: AWSURL
+  specsID: ID
+  notes: String
+  sps_name: String
+  is_active: Boolean
+  categoryID: ID
+  subcategoryID: ID
+  manufacturerID: ID
+}
+
+input DeleteEquipmentInput {
+  id: ID!
+}
+
+input ModelEquipmentConditionInput {
+  description: ModelStringInput
+  url: ModelStringInput
+  specsID: ModelIDInput
+  notes: ModelStringInput
+  sps_name: ModelStringInput
+  is_active: ModelBooleanInput
+  categoryID: ModelIDInput
+  subcategoryID: ModelIDInput
+  manufacturerID: ModelIDInput
+  and: [ModelEquipmentConditionInput]
+  or: [ModelEquipmentConditionInput]
+  not: ModelEquipmentConditionInput
+}
+
+type ModelManufacturerConnection {
+  items: [Manufacturer]
+  nextToken: String
+}
+
+input ModelManufacturerFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  and: [ModelManufacturerFilterInput]
+  or: [ModelManufacturerFilterInput]
+  not: ModelManufacturerFilterInput
+}
+
+input CreateManufacturerInput {
+  id: ID
+  name: String!
+}
+
+input UpdateManufacturerInput {
+  id: ID!
+  name: String
+}
+
+input DeleteManufacturerInput {
+  id: ID!
+}
+
+input ModelManufacturerConditionInput {
+  name: ModelStringInput
+  and: [ModelManufacturerConditionInput]
+  or: [ModelManufacturerConditionInput]
+  not: ModelManufacturerConditionInput
+}
+
+type ModelSupplierConnection {
+  items: [Supplier]
+  nextToken: String
+}
+
+input ModelSupplierFilterInput {
+  id: ModelIDInput
+  and: [ModelSupplierFilterInput]
+  or: [ModelSupplierFilterInput]
+  not: ModelSupplierFilterInput
+}
+
+input CreateSupplierInput {
+  id: ID
+}
+
+input UpdateSupplierInput {
+  id: ID!
+}
+
+input DeleteSupplierInput {
+  id: ID!
+}
+
+input ModelSupplierConditionInput {
+  and: [ModelSupplierConditionInput]
+  or: [ModelSupplierConditionInput]
+  not: ModelSupplierConditionInput
+}
+
+input CreateEquipmentSupplierInput {
+  id: ID
+  equipmentID: ID!
+  supplier_item_id: ID!
+  cost: Float!
+  currency: CurrencyType!
+  supplierID: ID!
+}
+
+input UpdateEquipmentSupplierInput {
+  id: ID!
+  equipmentID: ID
+  supplier_item_id: ID
+  cost: Float
+  currency: CurrencyType
+  supplierID: ID
+}
+
+input DeleteEquipmentSupplierInput {
+  id: ID!
+}
+
+input ModelCurrencyTypeInput {
+  eq: CurrencyType
+  ne: CurrencyType
+}
+
+input ModelEquipmentSupplierConditionInput {
+  equipmentID: ModelIDInput
+  supplier_item_id: ModelIDInput
+  cost: ModelFloatInput
+  currency: ModelCurrencyTypeInput
+  supplierID: ModelIDInput
+  and: [ModelEquipmentSupplierConditionInput]
+  or: [ModelEquipmentSupplierConditionInput]
+  not: ModelEquipmentSupplierConditionInput
+}
+
+type ModelInstallerConnection {
+  items: [Installer]
+  nextToken: String
+}
+
+input ModelInstallerFilterInput {
+  id: ModelIDInput
+  and: [ModelInstallerFilterInput]
+  or: [ModelInstallerFilterInput]
+  not: ModelInstallerFilterInput
+}
+
+input CreateInstallerInput {
+  id: ID
+}
+
+input UpdateInstallerInput {
+  id: ID!
+}
+
+input DeleteInstallerInput {
+  id: ID!
+}
+
+input ModelInstallerConditionInput {
+  and: [ModelInstallerConditionInput]
+  or: [ModelInstallerConditionInput]
+  not: ModelInstallerConditionInput
+}
+
+input CreateEquipmentInstallerInput {
+  id: ID
+  equipmentID: ID!
+  is_available: Boolean
+  cost: Float!
+  currency: CurrencyType!
+  installerID: ID!
+}
+
+input UpdateEquipmentInstallerInput {
+  id: ID!
+  equipmentID: ID
+  is_available: Boolean
+  cost: Float
+  currency: CurrencyType
+  installerID: ID
+}
+
+input DeleteEquipmentInstallerInput {
+  id: ID!
+}
+
+input ModelEquipmentInstallerConditionInput {
+  equipmentID: ModelIDInput
+  is_available: ModelBooleanInput
+  cost: ModelFloatInput
+  currency: ModelCurrencyTypeInput
+  installerID: ModelIDInput
+  and: [ModelEquipmentInstallerConditionInput]
+  or: [ModelEquipmentInstallerConditionInput]
+  not: ModelEquipmentInstallerConditionInput
+}
+
+type ModelCertificationConnection {
+  items: [Certification]
+  nextToken: String
+}
+
+input ModelCertificationFilterInput {
+  id: ModelIDInput
+  type: ModelStringInput
+  certifyingEntity: ModelStringInput
+  certificationDate: ModelStringInput
+  edition: ModelStringInput
+  and: [ModelCertificationFilterInput]
+  or: [ModelCertificationFilterInput]
+  not: ModelCertificationFilterInput
+}
+
+input CreateCertificationInput {
+  id: ID
+  type: String!
+  certifyingEntity: String!
+  certificationDate: AWSDate!
+  edition: String!
+}
+
+input UpdateCertificationInput {
+  id: ID!
+  type: String
+  certifyingEntity: String
+  certificationDate: AWSDate
+  edition: String
+}
+
+input DeleteCertificationInput {
+  id: ID!
+}
+
+input ModelCertificationConditionInput {
+  type: ModelStringInput
+  certifyingEntity: ModelStringInput
+  certificationDate: ModelStringInput
+  edition: ModelStringInput
+  and: [ModelCertificationConditionInput]
+  or: [ModelCertificationConditionInput]
+  not: ModelCertificationConditionInput
+}
+
+input CreateEquipmentCertificationInput {
+  id: ID
+  equipmentID: ID!
+  certificationID: ID!
+}
+
+input UpdateEquipmentCertificationInput {
+  id: ID!
+  equipmentID: ID
+  certificationID: ID
+}
+
+input DeleteEquipmentCertificationInput {
+  id: ID!
+}
+
+input ModelEquipmentCertificationConditionInput {
+  equipmentID: ModelIDInput
+  certificationID: ModelIDInput
+  and: [ModelEquipmentCertificationConditionInput]
+  or: [ModelEquipmentCertificationConditionInput]
+  not: ModelEquipmentCertificationConditionInput
+}
+
+input CreateCertificationZoneInput {
+  id: ID
+  zoneID: ID!
+  certificationID: ID!
+}
+
+input UpdateCertificationZoneInput {
+  id: ID!
+  zoneID: ID
+  certificationID: ID
+}
+
+input DeleteCertificationZoneInput {
+  id: ID!
+}
+
+input ModelCertificationZoneConditionInput {
+  zoneID: ModelIDInput
+  certificationID: ModelIDInput
+  and: [ModelCertificationZoneConditionInput]
+  or: [ModelCertificationZoneConditionInput]
+  not: ModelCertificationZoneConditionInput
+}
+
+input CreateCertification_UtilityZoneInput {
+  id: ID
+  utilityZoneID: ID!
+  certificationID: ID!
+}
+
+input UpdateCertification_UtilityZoneInput {
+  id: ID!
+  utilityZoneID: ID
+  certificationID: ID
+}
+
+input DeleteCertification_UtilityZoneInput {
+  id: ID!
+}
+
+input ModelCertification_UtilityZoneConditionInput {
+  utilityZoneID: ModelIDInput
+  certificationID: ModelIDInput
+  and: [ModelCertification_UtilityZoneConditionInput]
+  or: [ModelCertification_UtilityZoneConditionInput]
+  not: ModelCertification_UtilityZoneConditionInput
+}
+
+input CreateCategoryCertificationInput {
+  id: ID
+  certificationID: ID!
+  categoryID: ID!
+}
+
+input UpdateCategoryCertificationInput {
+  id: ID!
+  certificationID: ID
+  categoryID: ID
+}
+
+input DeleteCategoryCertificationInput {
+  id: ID!
+}
+
+input ModelCategoryCertificationConditionInput {
+  certificationID: ModelIDInput
+  categoryID: ModelIDInput
+  and: [ModelCategoryCertificationConditionInput]
+  or: [ModelCategoryCertificationConditionInput]
+  not: ModelCategoryCertificationConditionInput
+}
+
+type ModelCategoryConnection {
+  items: [Category]
+  nextToken: String
+}
+
+input ModelCategoriesInput {
+  eq: Categories
+  ne: Categories
+}
+
+input ModelCategoryFilterInput {
+  id: ModelIDInput
+  name: ModelCategoriesInput
+  and: [ModelCategoryFilterInput]
+  or: [ModelCategoryFilterInput]
+  not: ModelCategoryFilterInput
+}
+
+input CreateCategoryInput {
+  id: ID
+  name: Categories!
+}
+
+input UpdateCategoryInput {
+  id: ID!
+  name: Categories
+}
+
+input DeleteCategoryInput {
+  id: ID!
+}
+
+input ModelCategoryConditionInput {
+  name: ModelCategoriesInput
+  and: [ModelCategoryConditionInput]
+  or: [ModelCategoryConditionInput]
+  not: ModelCategoryConditionInput
+}
+
+type ModelSubcategoryConnection {
+  items: [Subcategory]
+  nextToken: String
+}
+
+input ModelSubcategoriesInput {
+  eq: Subcategories
+  ne: Subcategories
+}
+
+input ModelSubcategoryFilterInput {
+  id: ModelIDInput
+  name: ModelSubcategoriesInput
+  categoryID: ModelIDInput
+  and: [ModelSubcategoryFilterInput]
+  or: [ModelSubcategoryFilterInput]
+  not: ModelSubcategoryFilterInput
+}
+
+input CreateSubcategoryInput {
+  id: ID
+  name: Subcategories!
+  categoryID: ID!
+}
+
+input UpdateSubcategoryInput {
+  id: ID!
+  name: Subcategories
+  categoryID: ID
+}
+
+input DeleteSubcategoryInput {
+  id: ID!
+}
+
+input ModelSubcategoryConditionInput {
+  name: ModelSubcategoriesInput
+  categoryID: ModelIDInput
+  and: [ModelSubcategoryConditionInput]
+  or: [ModelSubcategoryConditionInput]
+  not: ModelSubcategoryConditionInput
+}
+
+type ModelEnclosureConnection {
+  items: [Enclosure]
+  nextToken: String
+}
+
+input ModelUsageInput {
+  eq: Usage
+  ne: Usage
+}
+
+input ModelEnclosureFilterInput {
+  id: ModelIDInput
+  NEMA: ModelStringInput
+  IP: ModelStringInput
+  description: ModelStringInput
+  usage1: ModelUsageInput
+  usage2: ModelUsageInput
+  and: [ModelEnclosureFilterInput]
+  or: [ModelEnclosureFilterInput]
+  not: ModelEnclosureFilterInput
+}
+
+input CreateEnclosureInput {
+  id: ID
+  NEMA: String!
+  IP: String
+  description: String!
+  usage1: Usage!
+  usage2: Usage
+}
+
+input UpdateEnclosureInput {
+  id: ID!
+  NEMA: String
+  IP: String
+  description: String
+  usage1: Usage
+  usage2: Usage
+}
+
+input DeleteEnclosureInput {
+  id: ID!
+}
+
+input ModelEnclosureConditionInput {
+  NEMA: ModelStringInput
+  IP: ModelStringInput
+  description: ModelStringInput
+  usage1: ModelUsageInput
+  usage2: ModelUsageInput
+  and: [ModelEnclosureConditionInput]
+  or: [ModelEnclosureConditionInput]
+  not: ModelEnclosureConditionInput
+}
+
+input CreateEquipmentEnclosureInput {
+  id: ID
+  equipmentID: ID!
+  enclosureID: ID!
+}
+
+input UpdateEquipmentEnclosureInput {
+  id: ID!
+  equipmentID: ID
+  enclosureID: ID
+}
+
+input DeleteEquipmentEnclosureInput {
+  id: ID!
+}
+
+input ModelEquipmentEnclosureConditionInput {
+  equipmentID: ModelIDInput
+  enclosureID: ModelIDInput
+  and: [ModelEquipmentEnclosureConditionInput]
+  or: [ModelEquipmentEnclosureConditionInput]
+  not: ModelEquipmentEnclosureConditionInput
+}
+
+type ModelIncentiveConnection {
+  items: [Incentive]
+  nextToken: String
+}
+
+input ModelIncentiveTypeInput {
+  eq: IncentiveType
+  ne: IncentiveType
+}
+
+input ModelIncentiveFilterInput {
+  id: ModelIDInput
+  type: ModelIncentiveTypeInput
+  name: ModelStringInput
+  utilityID: ModelIDInput
+  last_updated: ModelStringInput
+  is_cumulative: ModelBooleanInput
+  pbi_rate: ModelFloatInput
+  pbi_variation: ModelFloatInput
+  pbi_duration: ModelIntInput
+  pbi_cap_value: ModelFloatInput
+  sci_installation_cost_included: ModelBooleanInput
+  sci_storage_cost_included: ModelBooleanInput
+  sci_solar_pv_cost_included: ModelBooleanInput
+  sci_inverter_cost_included: ModelBooleanInput
+  sci_disconnect_switch_and_other_cost_included: ModelBooleanInput
+  sci_amount: ModelFloatInput
+  sci_cap: ModelFloatInput
+  sci_incentive_type: ModelBooleanInput
+  ssi_power_base: ModelStringInput
+  ssi_amount: ModelFloatInput
+  ssi_cap: ModelFloatInput
+  ssi_tax_rate: ModelFloatInput
+  fai_amount: ModelFloatInput
+  fai_tax_rate: ModelFloatInput
+  ed_incentive_value: ModelFloatInput
+  ed_percentage_eligible: ModelFloatInput
+  ed_taxe_rate: ModelFloatInput
+  evcs_amount_install: ModelFloatInput
+  evcs_amount_hw: ModelFloatInput
+  evcs_cap: ModelFloatInput
+  evcs_fixed_amount: ModelFloatInput
+  and: [ModelIncentiveFilterInput]
+  or: [ModelIncentiveFilterInput]
+  not: ModelIncentiveFilterInput
+}
+
+input CreateIncentiveInput {
+  id: ID
+  type: IncentiveType!
+  name: String!
+  utilityID: ID!
+  last_updated: AWSDateTime!
+  is_cumulative: Boolean!
+  pbi_rate: Float
+  pbi_variation: Float
+  pbi_duration: Int
+  pbi_cap_value: Float
+  sci_installation_cost_included: Boolean
+  sci_storage_cost_included: Boolean
+  sci_solar_pv_cost_included: Boolean
+  sci_inverter_cost_included: Boolean
+  sci_disconnect_switch_and_other_cost_included: Boolean
+  sci_amount: Float
+  sci_cap: Float
+  sci_incentive_type: Boolean
+  ssi_power_base: String
+  ssi_amount: Float
+  ssi_cap: Float
+  ssi_tax_rate: Float
+  fai_amount: Float
+  fai_tax_rate: Float
+  ed_incentive_value: Float
+  ed_percentage_eligible: Float
+  ed_taxe_rate: Float
+  evcs_amount_install: Float
+  evcs_amount_hw: Float
+  evcs_cap: Float
+  evcs_fixed_amount: Float
+}
+
+input UpdateIncentiveInput {
+  id: ID!
+  type: IncentiveType
+  name: String
+  utilityID: ID
+  last_updated: AWSDateTime
+  is_cumulative: Boolean
+  pbi_rate: Float
+  pbi_variation: Float
+  pbi_duration: Int
+  pbi_cap_value: Float
+  sci_installation_cost_included: Boolean
+  sci_storage_cost_included: Boolean
+  sci_solar_pv_cost_included: Boolean
+  sci_inverter_cost_included: Boolean
+  sci_disconnect_switch_and_other_cost_included: Boolean
+  sci_amount: Float
+  sci_cap: Float
+  sci_incentive_type: Boolean
+  ssi_power_base: String
+  ssi_amount: Float
+  ssi_cap: Float
+  ssi_tax_rate: Float
+  fai_amount: Float
+  fai_tax_rate: Float
+  ed_incentive_value: Float
+  ed_percentage_eligible: Float
+  ed_taxe_rate: Float
+  evcs_amount_install: Float
+  evcs_amount_hw: Float
+  evcs_cap: Float
+  evcs_fixed_amount: Float
+}
+
+input DeleteIncentiveInput {
+  id: ID!
+}
+
+input ModelIncentiveConditionInput {
+  type: ModelIncentiveTypeInput
+  name: ModelStringInput
+  utilityID: ModelIDInput
+  last_updated: ModelStringInput
+  is_cumulative: ModelBooleanInput
+  pbi_rate: ModelFloatInput
+  pbi_variation: ModelFloatInput
+  pbi_duration: ModelIntInput
+  pbi_cap_value: ModelFloatInput
+  sci_installation_cost_included: ModelBooleanInput
+  sci_storage_cost_included: ModelBooleanInput
+  sci_solar_pv_cost_included: ModelBooleanInput
+  sci_inverter_cost_included: ModelBooleanInput
+  sci_disconnect_switch_and_other_cost_included: ModelBooleanInput
+  sci_amount: ModelFloatInput
+  sci_cap: ModelFloatInput
+  sci_incentive_type: ModelBooleanInput
+  ssi_power_base: ModelStringInput
+  ssi_amount: ModelFloatInput
+  ssi_cap: ModelFloatInput
+  ssi_tax_rate: ModelFloatInput
+  fai_amount: ModelFloatInput
+  fai_tax_rate: ModelFloatInput
+  ed_incentive_value: ModelFloatInput
+  ed_percentage_eligible: ModelFloatInput
+  ed_taxe_rate: ModelFloatInput
+  evcs_amount_install: ModelFloatInput
+  evcs_amount_hw: ModelFloatInput
+  evcs_cap: ModelFloatInput
+  evcs_fixed_amount: ModelFloatInput
+  and: [ModelIncentiveConditionInput]
+  or: [ModelIncentiveConditionInput]
+  not: ModelIncentiveConditionInput
+}
+
+input CreateProjectIncentiveInput {
+  id: ID
+  projectID: ID!
+  incentiveID: ID!
+}
+
+input UpdateProjectIncentiveInput {
+  id: ID!
+  projectID: ID
+  incentiveID: ID
+}
+
+input DeleteProjectIncentiveInput {
+  id: ID!
+}
+
+input ModelProjectIncentiveConditionInput {
+  projectID: ModelIDInput
+  incentiveID: ModelIDInput
+  and: [ModelProjectIncentiveConditionInput]
+  or: [ModelProjectIncentiveConditionInput]
+  not: ModelProjectIncentiveConditionInput
+}
+
+input CreateIncentiveZoneInput {
+  id: ID
+  zoneID: ID!
+  incentiveID: ID!
+}
+
+input UpdateIncentiveZoneInput {
+  id: ID!
+  zoneID: ID
+  incentiveID: ID
+}
+
+input DeleteIncentiveZoneInput {
+  id: ID!
+}
+
+input ModelIncentiveZoneConditionInput {
+  zoneID: ModelIDInput
+  incentiveID: ModelIDInput
+  and: [ModelIncentiveZoneConditionInput]
+  or: [ModelIncentiveZoneConditionInput]
+  not: ModelIncentiveZoneConditionInput
+}
+
+type ModelDepreciationTableConnection {
+  items: [DepreciationTable]
+  nextToken: String
+}
+
+input ModelDepreciationTableFilterInput {
+  id: ModelIDInput
+  subcategoryID: ModelIDInput
+  zoneID: ModelIDInput
+  depreciationEntryID: ModelIDInput
+  depreciation_type: ModelBooleanInput
+  depreciation_straigth_line_yrs: ModelIntInput
+  and: [ModelDepreciationTableFilterInput]
+  or: [ModelDepreciationTableFilterInput]
+  not: ModelDepreciationTableFilterInput
+}
+
+input CreateDepreciationTableInput {
+  id: ID
+  subcategoryID: ID!
+  zoneID: ID!
+  depreciationEntryID: ID!
+  depreciation_type: Boolean!
+  depreciation_straigth_line_yrs: Int!
+}
+
+input UpdateDepreciationTableInput {
+  id: ID!
+  subcategoryID: ID
+  zoneID: ID
+  depreciationEntryID: ID
+  depreciation_type: Boolean
+  depreciation_straigth_line_yrs: Int
+}
+
+input DeleteDepreciationTableInput {
+  id: ID!
+}
+
+input ModelDepreciationTableConditionInput {
+  subcategoryID: ModelIDInput
+  zoneID: ModelIDInput
+  depreciationEntryID: ModelIDInput
+  depreciation_type: ModelBooleanInput
+  depreciation_straigth_line_yrs: ModelIntInput
+  and: [ModelDepreciationTableConditionInput]
+  or: [ModelDepreciationTableConditionInput]
+  not: ModelDepreciationTableConditionInput
+}
+
+type ModelDepreciationEntryConnection {
+  items: [DepreciationEntry]
+  nextToken: String
+}
+
+input ModelDepreciationEntryFilterInput {
+  id: ModelIDInput
+  year: ModelIntInput
+  depreciation_percentage_1: ModelFloatInput
+  depreciation_percentage_2_25: ModelFloatInput
+  and: [ModelDepreciationEntryFilterInput]
+  or: [ModelDepreciationEntryFilterInput]
+  not: ModelDepreciationEntryFilterInput
+}
+
+input CreateDepreciationEntryInput {
+  id: ID
+  year: Int!
+  depreciation_percentage_1: Float!
+  depreciation_percentage_2_25: Float!
+}
+
+input UpdateDepreciationEntryInput {
+  id: ID!
+  year: Int
+  depreciation_percentage_1: Float
+  depreciation_percentage_2_25: Float
+}
+
+input DeleteDepreciationEntryInput {
+  id: ID!
+}
+
+input ModelDepreciationEntryConditionInput {
+  year: ModelIntInput
+  depreciation_percentage_1: ModelFloatInput
+  depreciation_percentage_2_25: ModelFloatInput
+  and: [ModelDepreciationEntryConditionInput]
+  or: [ModelDepreciationEntryConditionInput]
+  not: ModelDepreciationEntryConditionInput
+}
+
+input CreateDepreciationTable_IncentiveInput {
+  id: ID
+  depreciationTableID: ID!
+  incentiveID: ID!
+}
+
+input UpdateDepreciationTable_IncentiveInput {
+  id: ID!
+  depreciationTableID: ID
+  incentiveID: ID
+}
+
+input DeleteDepreciationTable_IncentiveInput {
+  id: ID!
+}
+
+input ModelDepreciationTable_IncentiveConditionInput {
+  depreciationTableID: ModelIDInput
+  incentiveID: ModelIDInput
+  and: [ModelDepreciationTable_IncentiveConditionInput]
+  or: [ModelDepreciationTable_IncentiveConditionInput]
+  not: ModelDepreciationTable_IncentiveConditionInput
+}
+
+input LocationInput {
+  id: ID!
+  address: String!
+  latitude: Float
+  longitude: Float
+  timezone: String
+}
+
+type ModelProjectConnection @aws_iam @aws_cognito_user_pools {
+  items: [Project]
+  nextToken: String
+}
+
+input ModelProjectTypeInput {
+  eq: ProjectType
+  ne: ProjectType
+}
+
+input ModelProjectStatusInput {
+  eq: ProjectStatus
+  ne: ProjectStatus
+}
+
+input ModelProjectFilterInput {
+  id: ModelIDInput
+  type: ModelProjectTypeInput
+  status: ModelProjectStatusInput
+  history: ModelStringInput
+  and: [ModelProjectFilterInput]
+  or: [ModelProjectFilterInput]
+  not: ModelProjectFilterInput
+}
+
+input CreateProjectInput {
+  id: ID
+  type: ProjectType!
+  status: ProjectStatus!
+  history: [String]
+  location: LocationInput
+}
+
+input UpdateProjectInput {
+  id: ID!
+  type: ProjectType
+  status: ProjectStatus
+  history: [String]
+  location: LocationInput
+}
+
+input DeleteProjectInput {
+  id: ID!
+}
+
+input ModelProjectConditionInput {
+  type: ModelProjectTypeInput
+  status: ModelProjectStatusInput
+  history: ModelStringInput
+  and: [ModelProjectConditionInput]
+  or: [ModelProjectConditionInput]
+  not: ModelProjectConditionInput
+}
+
+type ModelAnswerConnection {
+  items: [Answer]
+  nextToken: String
+}
+
+input ModelAnswerFilterInput {
+  id: ModelIDInput
+  question_title: ModelStringInput
+  question_key: ModelStringInput
+  input_type: ModelStringInput
+  answer: ModelStringInput
+  answer_metadata: ModelStringInput
+  projectID: ModelIDInput
+  and: [ModelAnswerFilterInput]
+  or: [ModelAnswerFilterInput]
+  not: ModelAnswerFilterInput
+}
+
+input CreateAnswerInput {
+  id: ID
+  question_title: AWSJSON!
+  question_key: String!
+  input_type: String!
+  answer: AWSJSON!
+  answer_metadata: AWSJSON!
+  projectID: ID!
+}
+
+input UpdateAnswerInput {
+  id: ID!
+  question_title: AWSJSON
+  question_key: String
+  input_type: String
+  answer: AWSJSON
+  answer_metadata: AWSJSON
+  projectID: ID
+}
+
+input DeleteAnswerInput {
+  id: ID!
+}
+
+input ModelAnswerConditionInput {
+  question_title: ModelStringInput
+  question_key: ModelStringInput
+  input_type: ModelStringInput
+  answer: ModelStringInput
+  answer_metadata: ModelStringInput
+  projectID: ModelIDInput
+  and: [ModelAnswerConditionInput]
+  or: [ModelAnswerConditionInput]
+  not: ModelAnswerConditionInput
+}
+
+input BatterySpecsInput {
+  id: ID!
+  lifetime_cycle: Int!
+  lifetime_calendar: Int!
+  lifetime_cycle_dod: Float!
+  bess_chemestry_compatibility_1: ChemestryCompatibility!
+  bess_chemestry_compatibility_2: ChemestryCompatibility
+  bess_chemestry_compatibility_3: ChemestryCompatibility
+  bess_chemestry_compatibility_4: ChemestryCompatibility
+  mean_efficiency: Float!
+  max_charge: Float!
+  nominal_charge: Float!
+  max_discharge: Float!
+  nominal_discharge: Float!
+  max_voltage: Float!
+  min_voltage: Float!
+  nominal_voltage: Float!
+  rated_Ah: Float!
+  rated_kWh: Float!
+}
+
+input EVChargerSpecsInput {
+  id: ID!
+  lifetime_warranty: Int!
+  applications: Applications!
+  applications_other: String
+  port_NB: Int!
+  max_power_per_port_kW: Float!
+  voltage_connections_main: VoltageConnections!
+  voltage_connections_secondary: VoltageConnections
+}
+
+input HybridInverterSpecsInput {
+  id: ID!
+  lifetime: Int!
+  voltage_connections_main: VoltageConnections!
+  voltage_connections_secondary: VoltageConnections
+  grid_forming: Boolean!
+  external_MPPT: Boolean!
+  stacking_limit: Int!
+  thee_phase_stacking: Int!
+  UPS_function: Boolean!
+  efficiency_AC: Float!
+  nominal_power_kw: Float!
+  peak_current: Float!
+  nominal_current: Float!
+  frequency: Frequency!
+  active_frequency_shift_curtailment: Boolean!
+  MPPT_NB: Int!
+  max_power_per_MPPT_kW: Float!
+  max_MPPT1: Float!
+  max_MPPT2: Float
+  max_MPPT3: Float
+  max_MPPT4: Float
+  max_MPPT5: Float
+  total_max: Float!
+  usable_MPPT1: Float!
+  usable_MPPT2: Float
+  usable_MPPT3: Float
+  usable_MPPT4: Float
+  usable_MPPT5: Float
+  MPPT_max_voltage: Float!
+  MPPT_min_voltage: Float!
+  MPPT_nominal_voltage: Float!
+  total_max_voltage: Float!
+  operating_max_voltage: Float!
+  operating_min_voltage: Float!
+  internal: Boolean!
+  string_number_limitation: Int!
+  current_limitation: Float!
+  nominal_charge: Float!
+  nominal_discharge: Float!
+  max_voltage: Float!
+  min_voltage: Float!
+  nominal_voltage: Float!
+  bess_chemestry_compatibility_1: ChemestryCompatibility!
+  bess_chemestry_compatibility_2: ChemestryCompatibility
+  bess_chemestry_compatibility_3: ChemestryCompatibility
+  bess_chemestry_compatibility_4: ChemestryCompatibility
+  efficiency_DC: Float!
+  max_capacity_kWh: Float!
+  min_capacity_kWh: Float!
+}
+
+input InverterSpecsInput {
+  id: ID!
+  max_power_kW: Float!
+  nominal_power_kw: Float!
+  peak_current: Float!
+  peak_duration_seconds: Int!
+  breaker_size: Int!
+  max_continuous_current: Float!
+  phases_NB: Int!
+  voltage_connections_main: VoltageConnections!
+  voltage_connections_secondary: VoltageConnections
+  frequency: Frequency!
+  active_frequency_shift_curtailment: Boolean!
+  MPPT_NB: Int!
+  max_power_per_MPPT_kW: Float!
+  max_MPPT1: Float!
+  max_MPPT2: Float
+  max_MPPT3: Float
+  max_MPPT4: Float
+  max_MPPT5: Float
+  total_max: Float!
+  usable_MPPT1: Float!
+  usable_MPPT2: Float
+  usable_MPPT3: Float
+  usable_MPPT4: Float
+  usable_MPPT5: Float
+  MPPT_max_voltage: Float!
+  MPPT_min_voltage: Float!
+  nominal_voltage: Float!
+  total_max_voltage: Float!
+  operating_max_voltage: Float!
+  operating_min_voltage: Float!
+  internal: Boolean!
+  string_number_limitation: Int!
+  current_limitation: Float!
+  lifetime_warranty: Int!
+  grid_forming: Boolean!
+  CEC_efficiency: Float!
+  MAX_efficiency: Float!
+}
+
+input InverterChargerSpecsInput {
+  id: ID!
+  lifetime_warranty: Int!
+  grid_forming: Boolean!
+  UPS_function: Boolean!
+  nominal_charge: Float!
+  nominal_discharge: Float!
+  max_charge: Float!
+  max_discharge: Float!
+  max_voltage_DC: Float!
+  min_voltage_DC: Float!
+  nominal_voltage_DC: Float!
+  bess_chemestry_compatibility_1: ChemestryCompatibility!
+  bess_chemestry_compatibility_2: ChemestryCompatibility
+  bess_chemestry_compatibility_3: ChemestryCompatibility
+  bess_chemestry_compatibility_4: ChemestryCompatibility
+  efficiency: Float!
+  nominal_power_kw: Float!
+  peak_current: Float!
+  nominal_current: Float!
+  voltage_connections_main: VoltageConnections!
+  voltage_connections_secondary: VoltageConnections
+  max_voltage_AC: Float!
+  min_voltage_AC: Float!
+  nominal_voltage_AC: Float!
+  frequency: Frequency!
+}
+
+input MPPTSpecsInput {
+  id: ID!
+  MPPT_NB: Int!
+  max_power_per_MPPT_kW: Float!
+  max_MPPT1: Float!
+  max_MPPT2: Float
+  max_MPPT3: Float
+  max_MPPT4: Float
+  max_MPPT5: Float
+  total_max: Float!
+  usable_MPPT1: Float!
+  usable_MPPT2: Float
+  usable_MPPT3: Float
+  usable_MPPT4: Float
+  usable_MPPT5: Float
+  MPPT_max_voltage: Float!
+  MPPT_min_voltage: Float!
+  nominal_voltage: Float!
+  total_max_voltage: Float!
+  operating_max_voltage: Float!
+  operating_min_voltage: Float!
+  internal: Boolean!
+  string_number_limitation: Int!
+  current_limitation: Float!
+  lifetime_warranty: Int!
+  grid_forming: Boolean!
+}
+
+input SolarPanelSpecsInput {
+  id: ID!
+  lifetime_warranty: Int!
+  width_m: Float!
+  length_m: Float!
+  thickness_mm: Float!
+  is_bifacial: Boolean!
+  IMP: Float!
+  ISC: Float!
+  VMP: Float!
+  VOC: Float!
+  NOCT: Int!
+  NCell: Int!
+  efficiency: Float!
+  bifaial_gain: Float!
+  temp_coeff_Isc: Float!
+  temp_coeff_Voc: Float!
+  temp_coeff_Pmax: Float!
+  rated_power_stc_W: Float!
+}
+
+type ModelSpecsConnection {
+  items: [Specs]
+  nextToken: String
+}
+
+input ModelSpecsFilterInput {
+  id: ModelIDInput
+  and: [ModelSpecsFilterInput]
+  or: [ModelSpecsFilterInput]
+  not: ModelSpecsFilterInput
+}
+
+input CreateSpecsInput {
+  id: ID
+  batterySpecs: BatterySpecsInput
+  evChargerSpecs: EVChargerSpecsInput
+  hybridInverterSpecs: HybridInverterSpecsInput
+  inverterSpecs: InverterSpecsInput
+  inverterChargerSpecs: InverterChargerSpecsInput
+  mpptSpecs: MPPTSpecsInput
+  solarPanelSpecs: SolarPanelSpecsInput
+}
+
+input UpdateSpecsInput {
+  id: ID!
+  batterySpecs: BatterySpecsInput
+  evChargerSpecs: EVChargerSpecsInput
+  hybridInverterSpecs: HybridInverterSpecsInput
+  inverterSpecs: InverterSpecsInput
+  inverterChargerSpecs: InverterChargerSpecsInput
+  mpptSpecs: MPPTSpecsInput
+  solarPanelSpecs: SolarPanelSpecsInput
+}
+
+input DeleteSpecsInput {
+  id: ID!
+}
+
+input ModelSpecsConditionInput {
+  and: [ModelSpecsConditionInput]
+  or: [ModelSpecsConditionInput]
+  not: ModelSpecsConditionInput
+}
+
+type ModelTariffConnection {
+  items: [Tariff]
+  nextToken: String
+}
+
+input ModelTimePeriodInput {
+  eq: TimePeriod
+  ne: TimePeriod
+}
+
+input ModelUnitInput {
+  eq: Unit
+  ne: Unit
+}
+
+input ModelEnergyRateTypeInput {
+  eq: EnergyRateType
+  ne: EnergyRateType
+}
+
+input ModelNetMeteringLimitTypesInput {
+  eq: NetMeteringLimitTypes
+  ne: NetMeteringLimitTypes
+}
+
+input ModelPowerRateTypeInput {
+  eq: PowerRateType
+  ne: PowerRateType
+}
+
+input ModelTierInput {
+  eq: Tier
+  ne: Tier
+}
+
+input ModelTariffFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  utilityID: ModelIDInput
+  last_updated: ModelStringInput
+  notes: ModelStringInput
+  max_energy_consumption_kWh: ModelFloatInput
+  max_energy_consumption_period: ModelTimePeriodInput
+  max_demand_power_peak: ModelFloatInput
+  max_demand_unit: ModelUnitInput
+  max_demand_period: ModelTimePeriodInput
+  min_demand_power_peak: ModelFloatInput
+  min_demand_unit: ModelUnitInput
+  min_demand_period: ModelTimePeriodInput
+  energy_rate_type: ModelEnergyRateTypeInput
+  flat_rate: ModelFloatInput
+  base_rate: ModelFloatInput
+  capacity_per_period: ModelTimePeriodInput
+  has_net_metering_program: ModelBooleanInput
+  net_metering_limit: ModelFloatInput
+  net_metering_limit_type: ModelNetMeteringLimitTypesInput
+  has_feed_in_program: ModelBooleanInput
+  sellback_rate: ModelFloatInput
+  has_tou_feed_in: ModelBooleanInput
+  has_tou_pricing: ModelBooleanInput
+  has_base_price_WE: ModelBooleanInput
+  power_rate_type: ModelPowerRateTypeInput
+  has_fixed_power_contracct: ModelBooleanInput
+  power_contract_rate: ModelFloatInput
+  above_kW: ModelFloatInput
+  has_variable_pricing: ModelBooleanInput
+  has_tou_power_pricing: ModelBooleanInput
+  has_lesser_of_pricing: ModelBooleanInput
+  lesser_of_kW: ModelFloatInput
+  lesser_of_kWh: ModelFloatInput
+  has_power_demand_peak_exceeding_pricing: ModelBooleanInput
+  period_not_to_exceed: ModelTimePeriodInput
+  max_power_per_period: ModelFloatInput
+  rate_after_exceeded: ModelTierInput
+  has_yr_per_yr_dynamic_pwr_contract: ModelBooleanInput
+  has_flat_charge: ModelBooleanInput
+  flat_charge_period: ModelTimePeriodInput
+  flat_charge_amount: ModelFloatInput
+  has_variable_charge: ModelBooleanInput
+  installation_power_value: ModelFloatInput
+  electric_consumption: ModelFloatInput
+  rebate_percentage: ModelFloatInput
+  tax_surcharge_percentage: ModelFloatInput
+  has_demand_response: ModelBooleanInput
+  demand_response_rate_kWh: ModelFloatInput
+  credit_price_kW: ModelFloatInput
+  interconnection_limit: ModelFloatInput
+  and: [ModelTariffFilterInput]
+  or: [ModelTariffFilterInput]
+  not: ModelTariffFilterInput
+}
+
+input CreateTariffInput {
+  id: ID
+  name: String!
+  utilityID: ID!
+  last_updated: AWSDateTime!
+  notes: String!
+  max_energy_consumption_kWh: Float
+  max_energy_consumption_period: TimePeriod
+  max_demand_power_peak: Float
+  max_demand_unit: Unit
+  max_demand_period: TimePeriod
+  min_demand_power_peak: Float
+  min_demand_unit: Unit
+  min_demand_period: TimePeriod
+  energy_rate_type: EnergyRateType!
+  flat_rate: Float
+  base_rate: Float
+  capacity_per_period: TimePeriod
+  has_net_metering_program: Boolean!
+  net_metering_limit: Float
+  net_metering_limit_type: NetMeteringLimitTypes
+  has_feed_in_program: Boolean!
+  sellback_rate: Float
+  has_tou_feed_in: Boolean!
+  has_tou_pricing: Boolean!
+  has_base_price_WE: Boolean!
+  power_rate_type: PowerRateType!
+  has_fixed_power_contracct: Boolean!
+  power_contract_rate: Float
+  above_kW: Float
+  has_variable_pricing: Boolean!
+  has_tou_power_pricing: Boolean!
+  has_lesser_of_pricing: Boolean!
+  lesser_of_kW: Float
+  lesser_of_kWh: Float
+  has_power_demand_peak_exceeding_pricing: Boolean!
+  period_not_to_exceed: TimePeriod
+  max_power_per_period: Float
+  rate_after_exceeded: Tier
+  has_yr_per_yr_dynamic_pwr_contract: Boolean!
+  has_flat_charge: Boolean!
+  flat_charge_period: TimePeriod
+  flat_charge_amount: Float
+  has_variable_charge: Boolean!
+  installation_power_value: Float!
+  electric_consumption: Float!
+  rebate_percentage: Float!
+  tax_surcharge_percentage: Float!
+  has_demand_response: Boolean!
+  demand_response_rate_kWh: Float!
+  credit_price_kW: Float!
+  interconnection_limit: Float!
+}
+
+input UpdateTariffInput {
+  id: ID!
+  name: String
+  utilityID: ID
+  last_updated: AWSDateTime
+  notes: String
+  max_energy_consumption_kWh: Float
+  max_energy_consumption_period: TimePeriod
+  max_demand_power_peak: Float
+  max_demand_unit: Unit
+  max_demand_period: TimePeriod
+  min_demand_power_peak: Float
+  min_demand_unit: Unit
+  min_demand_period: TimePeriod
+  energy_rate_type: EnergyRateType
+  flat_rate: Float
+  base_rate: Float
+  capacity_per_period: TimePeriod
+  has_net_metering_program: Boolean
+  net_metering_limit: Float
+  net_metering_limit_type: NetMeteringLimitTypes
+  has_feed_in_program: Boolean
+  sellback_rate: Float
+  has_tou_feed_in: Boolean
+  has_tou_pricing: Boolean
+  has_base_price_WE: Boolean
+  power_rate_type: PowerRateType
+  has_fixed_power_contracct: Boolean
+  power_contract_rate: Float
+  above_kW: Float
+  has_variable_pricing: Boolean
+  has_tou_power_pricing: Boolean
+  has_lesser_of_pricing: Boolean
+  lesser_of_kW: Float
+  lesser_of_kWh: Float
+  has_power_demand_peak_exceeding_pricing: Boolean
+  period_not_to_exceed: TimePeriod
+  max_power_per_period: Float
+  rate_after_exceeded: Tier
+  has_yr_per_yr_dynamic_pwr_contract: Boolean
+  has_flat_charge: Boolean
+  flat_charge_period: TimePeriod
+  flat_charge_amount: Float
+  has_variable_charge: Boolean
+  installation_power_value: Float
+  electric_consumption: Float
+  rebate_percentage: Float
+  tax_surcharge_percentage: Float
+  has_demand_response: Boolean
+  demand_response_rate_kWh: Float
+  credit_price_kW: Float
+  interconnection_limit: Float
+}
+
+input DeleteTariffInput {
+  id: ID!
+}
+
+input ModelTariffConditionInput {
+  name: ModelStringInput
+  utilityID: ModelIDInput
+  last_updated: ModelStringInput
+  notes: ModelStringInput
+  max_energy_consumption_kWh: ModelFloatInput
+  max_energy_consumption_period: ModelTimePeriodInput
+  max_demand_power_peak: ModelFloatInput
+  max_demand_unit: ModelUnitInput
+  max_demand_period: ModelTimePeriodInput
+  min_demand_power_peak: ModelFloatInput
+  min_demand_unit: ModelUnitInput
+  min_demand_period: ModelTimePeriodInput
+  energy_rate_type: ModelEnergyRateTypeInput
+  flat_rate: ModelFloatInput
+  base_rate: ModelFloatInput
+  capacity_per_period: ModelTimePeriodInput
+  has_net_metering_program: ModelBooleanInput
+  net_metering_limit: ModelFloatInput
+  net_metering_limit_type: ModelNetMeteringLimitTypesInput
+  has_feed_in_program: ModelBooleanInput
+  sellback_rate: ModelFloatInput
+  has_tou_feed_in: ModelBooleanInput
+  has_tou_pricing: ModelBooleanInput
+  has_base_price_WE: ModelBooleanInput
+  power_rate_type: ModelPowerRateTypeInput
+  has_fixed_power_contracct: ModelBooleanInput
+  power_contract_rate: ModelFloatInput
+  above_kW: ModelFloatInput
+  has_variable_pricing: ModelBooleanInput
+  has_tou_power_pricing: ModelBooleanInput
+  has_lesser_of_pricing: ModelBooleanInput
+  lesser_of_kW: ModelFloatInput
+  lesser_of_kWh: ModelFloatInput
+  has_power_demand_peak_exceeding_pricing: ModelBooleanInput
+  period_not_to_exceed: ModelTimePeriodInput
+  max_power_per_period: ModelFloatInput
+  rate_after_exceeded: ModelTierInput
+  has_yr_per_yr_dynamic_pwr_contract: ModelBooleanInput
+  has_flat_charge: ModelBooleanInput
+  flat_charge_period: ModelTimePeriodInput
+  flat_charge_amount: ModelFloatInput
+  has_variable_charge: ModelBooleanInput
+  installation_power_value: ModelFloatInput
+  electric_consumption: ModelFloatInput
+  rebate_percentage: ModelFloatInput
+  tax_surcharge_percentage: ModelFloatInput
+  has_demand_response: ModelBooleanInput
+  demand_response_rate_kWh: ModelFloatInput
+  credit_price_kW: ModelFloatInput
+  interconnection_limit: ModelFloatInput
+  and: [ModelTariffConditionInput]
+  or: [ModelTariffConditionInput]
+  not: ModelTariffConditionInput
+}
+
+input CreateTariffZoneInput {
+  id: ID
+  zoneID: ID!
+  tariffID: ID!
+}
+
+input UpdateTariffZoneInput {
+  id: ID!
+  zoneID: ID
+  tariffID: ID
+}
+
+input DeleteTariffZoneInput {
+  id: ID!
+}
+
+input ModelTariffZoneConditionInput {
+  zoneID: ModelIDInput
+  tariffID: ModelIDInput
+  and: [ModelTariffZoneConditionInput]
+  or: [ModelTariffZoneConditionInput]
+  not: ModelTariffZoneConditionInput
+}
+
+type ModelTierRateEntryConnection {
+  items: [TierRateEntry]
+  nextToken: String
+}
+
+input ModelTierRateEntryFilterInput {
+  id: ModelIDInput
+  tariffID: ModelIDInput
+  max_kwh: ModelFloatInput
+  rate: ModelFloatInput
+  and: [ModelTierRateEntryFilterInput]
+  or: [ModelTierRateEntryFilterInput]
+  not: ModelTierRateEntryFilterInput
+}
+
+input CreateTierRateEntryInput {
+  id: ID
+  tariffID: ID!
+  max_kwh: Float!
+  rate: Float!
+}
+
+input UpdateTierRateEntryInput {
+  id: ID!
+  tariffID: ID
+  max_kwh: Float
+  rate: Float
+}
+
+input DeleteTierRateEntryInput {
+  id: ID!
+}
+
+input ModelTierRateEntryConditionInput {
+  tariffID: ModelIDInput
+  max_kwh: ModelFloatInput
+  rate: ModelFloatInput
+  and: [ModelTierRateEntryConditionInput]
+  or: [ModelTierRateEntryConditionInput]
+  not: ModelTierRateEntryConditionInput
+}
+
+type ModelConditionalTierRateEntryConnection {
+  items: [ConditionalTierRateEntry]
+  nextToken: String
+}
+
+input ModelConditionalTierRateEntryFilterInput {
+  id: ModelIDInput
+  tariffID: ModelIDInput
+  max_kwh: ModelFloatInput
+  mumber_of_days_in_month: ModelIntInput
+  rate: ModelFloatInput
+  and: [ModelConditionalTierRateEntryFilterInput]
+  or: [ModelConditionalTierRateEntryFilterInput]
+  not: ModelConditionalTierRateEntryFilterInput
+}
+
+input CreateConditionalTierRateEntryInput {
+  id: ID
+  tariffID: ID!
+  max_kwh: Float!
+  mumber_of_days_in_month: Int!
+  rate: Float!
+}
+
+input UpdateConditionalTierRateEntryInput {
+  id: ID!
+  tariffID: ID
+  max_kwh: Float
+  mumber_of_days_in_month: Int
+  rate: Float
+}
+
+input DeleteConditionalTierRateEntryInput {
+  id: ID!
+}
+
+input ModelConditionalTierRateEntryConditionInput {
+  tariffID: ModelIDInput
+  max_kwh: ModelFloatInput
+  mumber_of_days_in_month: ModelIntInput
+  rate: ModelFloatInput
+  and: [ModelConditionalTierRateEntryConditionInput]
+  or: [ModelConditionalTierRateEntryConditionInput]
+  not: ModelConditionalTierRateEntryConditionInput
+}
+
+type ModelPowerRateEntryConnection {
+  items: [PowerRateEntry]
+  nextToken: String
+}
+
+input ModelPowerRateEntryFilterInput {
+  id: ModelIDInput
+  tariffID: ModelIDInput
+  min_kWh: ModelFloatInput
+  max_kWh: ModelFloatInput
+  rate: ModelFloatInput
+  and: [ModelPowerRateEntryFilterInput]
+  or: [ModelPowerRateEntryFilterInput]
+  not: ModelPowerRateEntryFilterInput
+}
+
+input CreatePowerRateEntryInput {
+  id: ID
+  tariffID: ID!
+  min_kWh: Float!
+  max_kWh: Float!
+  rate: Float!
+}
+
+input UpdatePowerRateEntryInput {
+  id: ID!
+  tariffID: ID
+  min_kWh: Float
+  max_kWh: Float
+  rate: Float
+}
+
+input DeletePowerRateEntryInput {
+  id: ID!
+}
+
+input ModelPowerRateEntryConditionInput {
+  tariffID: ModelIDInput
+  min_kWh: ModelFloatInput
+  max_kWh: ModelFloatInput
+  rate: ModelFloatInput
+  and: [ModelPowerRateEntryConditionInput]
+  or: [ModelPowerRateEntryConditionInput]
+  not: ModelPowerRateEntryConditionInput
+}
+
+type ModelEnergyTOUEntryConnection {
+  items: [EnergyTOUEntry]
+  nextToken: String
+}
+
+input ModelDaysInput {
+  eq: Days
+  ne: Days
+}
+
+input ModelEnergyTOUEntryFilterInput {
+  id: ModelIDInput
+  tariffID: ModelIDInput
+  rate: ModelFloatInput
+  starting_hour: ModelStringInput
+  ending_hour: ModelStringInput
+  days: ModelDaysInput
+  start_date: ModelStringInput
+  end_date: ModelStringInput
+  and: [ModelEnergyTOUEntryFilterInput]
+  or: [ModelEnergyTOUEntryFilterInput]
+  not: ModelEnergyTOUEntryFilterInput
+}
+
+input CreateEnergyTOUEntryInput {
+  id: ID
+  tariffID: ID!
+  rate: Float!
+  starting_hour: AWSTime!
+  ending_hour: AWSTime!
+  days: Days!
+  start_date: AWSDate!
+  end_date: AWSDate!
+}
+
+input UpdateEnergyTOUEntryInput {
+  id: ID!
+  tariffID: ID
+  rate: Float
+  starting_hour: AWSTime
+  ending_hour: AWSTime
+  days: Days
+  start_date: AWSDate
+  end_date: AWSDate
+}
+
+input DeleteEnergyTOUEntryInput {
+  id: ID!
+}
+
+input ModelEnergyTOUEntryConditionInput {
+  tariffID: ModelIDInput
+  rate: ModelFloatInput
+  starting_hour: ModelStringInput
+  ending_hour: ModelStringInput
+  days: ModelDaysInput
+  start_date: ModelStringInput
+  end_date: ModelStringInput
+  and: [ModelEnergyTOUEntryConditionInput]
+  or: [ModelEnergyTOUEntryConditionInput]
+  not: ModelEnergyTOUEntryConditionInput
+}
+
+type ModelFeedInTariffTOUEntryConnection {
+  items: [FeedInTariffTOUEntry]
+  nextToken: String
+}
+
+input ModelFeedInTariffTOUEntryFilterInput {
+  id: ModelIDInput
+  tariffID: ModelIDInput
+  rate: ModelFloatInput
+  starting_hour: ModelStringInput
+  ending_hour: ModelStringInput
+  days: ModelDaysInput
+  start_date: ModelStringInput
+  end_date: ModelStringInput
+  and: [ModelFeedInTariffTOUEntryFilterInput]
+  or: [ModelFeedInTariffTOUEntryFilterInput]
+  not: ModelFeedInTariffTOUEntryFilterInput
+}
+
+input CreateFeedInTariffTOUEntryInput {
+  id: ID
+  tariffID: ID!
+  rate: Float!
+  starting_hour: AWSTime!
+  ending_hour: AWSTime!
+  days: Days!
+  start_date: AWSDate!
+  end_date: AWSDate!
+}
+
+input UpdateFeedInTariffTOUEntryInput {
+  id: ID!
+  tariffID: ID
+  rate: Float
+  starting_hour: AWSTime
+  ending_hour: AWSTime
+  days: Days
+  start_date: AWSDate
+  end_date: AWSDate
+}
+
+input DeleteFeedInTariffTOUEntryInput {
+  id: ID!
+}
+
+input ModelFeedInTariffTOUEntryConditionInput {
+  tariffID: ModelIDInput
+  rate: ModelFloatInput
+  starting_hour: ModelStringInput
+  ending_hour: ModelStringInput
+  days: ModelDaysInput
+  start_date: ModelStringInput
+  end_date: ModelStringInput
+  and: [ModelFeedInTariffTOUEntryConditionInput]
+  or: [ModelFeedInTariffTOUEntryConditionInput]
+  not: ModelFeedInTariffTOUEntryConditionInput
+}
+
+type ModelPowerTOUEntryConnection {
+  items: [PowerTOUEntry]
+  nextToken: String
+}
+
+input ModelPowerTOUEntryFilterInput {
+  id: ModelIDInput
+  tariffID: ModelIDInput
+  rate: ModelFloatInput
+  starting_hour: ModelStringInput
+  ending_hour: ModelStringInput
+  days: ModelDaysInput
+  start_date: ModelStringInput
+  end_date: ModelStringInput
+  and: [ModelPowerTOUEntryFilterInput]
+  or: [ModelPowerTOUEntryFilterInput]
+  not: ModelPowerTOUEntryFilterInput
+}
+
+input CreatePowerTOUEntryInput {
+  id: ID
+  tariffID: ID!
+  rate: Float!
+  starting_hour: AWSTime!
+  ending_hour: AWSTime!
+  days: Days!
+  start_date: AWSDate!
+  end_date: AWSDate!
+}
+
+input UpdatePowerTOUEntryInput {
+  id: ID!
+  tariffID: ID
+  rate: Float
+  starting_hour: AWSTime
+  ending_hour: AWSTime
+  days: Days
+  start_date: AWSDate
+  end_date: AWSDate
+}
+
+input DeletePowerTOUEntryInput {
+  id: ID!
+}
+
+input ModelPowerTOUEntryConditionInput {
+  tariffID: ModelIDInput
+  rate: ModelFloatInput
+  starting_hour: ModelStringInput
+  ending_hour: ModelStringInput
+  days: ModelDaysInput
+  start_date: ModelStringInput
+  end_date: ModelStringInput
+  and: [ModelPowerTOUEntryConditionInput]
+  or: [ModelPowerTOUEntryConditionInput]
+  not: ModelPowerTOUEntryConditionInput
+}
+
+input ModelIDKeyConditionInput {
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  between: [ID]
+  beginsWith: ID
+}
+
+type ModelUtilityZoneConnection {
+  items: [UtilityZone]
+  nextToken: String
+}
+
+input ModelUtilityZoneFilterInput {
+  id: ModelIDInput
+  zoneID: ModelIDInput
+  utilityID: ModelIDInput
+  and: [ModelUtilityZoneFilterInput]
+  or: [ModelUtilityZoneFilterInput]
+  not: ModelUtilityZoneFilterInput
+}
+
+type ModelCertificationZoneConnection {
+  items: [CertificationZone]
+  nextToken: String
+}
+
+input ModelCertificationZoneFilterInput {
+  id: ModelIDInput
+  zoneID: ModelIDInput
+  certificationID: ModelIDInput
+  and: [ModelCertificationZoneFilterInput]
+  or: [ModelCertificationZoneFilterInput]
+  not: ModelCertificationZoneFilterInput
+}
+
+type ModelIncentiveZoneConnection {
+  items: [IncentiveZone]
+  nextToken: String
+}
+
+input ModelIncentiveZoneFilterInput {
+  id: ModelIDInput
+  zoneID: ModelIDInput
+  incentiveID: ModelIDInput
+  and: [ModelIncentiveZoneFilterInput]
+  or: [ModelIncentiveZoneFilterInput]
+  not: ModelIncentiveZoneFilterInput
+}
+
+type ModelTariffZoneConnection {
+  items: [TariffZone]
+  nextToken: String
+}
+
+input ModelTariffZoneFilterInput {
+  id: ModelIDInput
+  zoneID: ModelIDInput
+  tariffID: ModelIDInput
+  and: [ModelTariffZoneFilterInput]
+  or: [ModelTariffZoneFilterInput]
+  not: ModelTariffZoneFilterInput
+}
+
+type ModelCertification_UtilityZoneConnection {
+  items: [Certification_UtilityZone]
+  nextToken: String
+}
+
+input ModelCertification_UtilityZoneFilterInput {
+  id: ModelIDInput
+  utilityZoneID: ModelIDInput
+  certificationID: ModelIDInput
+  and: [ModelCertification_UtilityZoneFilterInput]
+  or: [ModelCertification_UtilityZoneFilterInput]
+  not: ModelCertification_UtilityZoneFilterInput
+}
+
+type ModelEquipmentSupplierConnection {
+  items: [EquipmentSupplier]
+  nextToken: String
+}
+
+input ModelEquipmentSupplierFilterInput {
+  id: ModelIDInput
+  equipmentID: ModelIDInput
+  supplier_item_id: ModelIDInput
+  cost: ModelFloatInput
+  currency: ModelCurrencyTypeInput
+  supplierID: ModelIDInput
+  and: [ModelEquipmentSupplierFilterInput]
+  or: [ModelEquipmentSupplierFilterInput]
+  not: ModelEquipmentSupplierFilterInput
+}
+
+type ModelEquipmentInstallerConnection {
+  items: [EquipmentInstaller]
+  nextToken: String
+}
+
+input ModelEquipmentInstallerFilterInput {
+  id: ModelIDInput
+  equipmentID: ModelIDInput
+  is_available: ModelBooleanInput
+  cost: ModelFloatInput
+  currency: ModelCurrencyTypeInput
+  installerID: ModelIDInput
+  and: [ModelEquipmentInstallerFilterInput]
+  or: [ModelEquipmentInstallerFilterInput]
+  not: ModelEquipmentInstallerFilterInput
+}
+
+type ModelEquipmentCertificationConnection {
+  items: [EquipmentCertification]
+  nextToken: String
+}
+
+input ModelEquipmentCertificationFilterInput {
+  id: ModelIDInput
+  equipmentID: ModelIDInput
+  certificationID: ModelIDInput
+  and: [ModelEquipmentCertificationFilterInput]
+  or: [ModelEquipmentCertificationFilterInput]
+  not: ModelEquipmentCertificationFilterInput
+}
+
+type ModelEquipmentEnclosureConnection {
+  items: [EquipmentEnclosure]
+  nextToken: String
+}
+
+input ModelEquipmentEnclosureFilterInput {
+  id: ModelIDInput
+  equipmentID: ModelIDInput
+  enclosureID: ModelIDInput
+  and: [ModelEquipmentEnclosureFilterInput]
+  or: [ModelEquipmentEnclosureFilterInput]
+  not: ModelEquipmentEnclosureFilterInput
+}
+
+type ModelCategoryCertificationConnection {
+  items: [CategoryCertification]
+  nextToken: String
+}
+
+input ModelCategoryCertificationFilterInput {
+  id: ModelIDInput
+  certificationID: ModelIDInput
+  categoryID: ModelIDInput
+  and: [ModelCategoryCertificationFilterInput]
+  or: [ModelCategoryCertificationFilterInput]
+  not: ModelCategoryCertificationFilterInput
+}
+
+type ModelProjectIncentiveConnection {
+  items: [ProjectIncentive]
+  nextToken: String
+}
+
+input ModelProjectIncentiveFilterInput {
+  id: ModelIDInput
+  projectID: ModelIDInput
+  incentiveID: ModelIDInput
+  and: [ModelProjectIncentiveFilterInput]
+  or: [ModelProjectIncentiveFilterInput]
+  not: ModelProjectIncentiveFilterInput
+}
+
+type ModelDepreciationTable_IncentiveConnection {
+  items: [DepreciationTable_Incentive]
+  nextToken: String
+}
+
+input ModelDepreciationTable_IncentiveFilterInput {
+  id: ModelIDInput
+  depreciationTableID: ModelIDInput
+  incentiveID: ModelIDInput
+  and: [ModelDepreciationTable_IncentiveFilterInput]
+  or: [ModelDepreciationTable_IncentiveFilterInput]
+  not: ModelDepreciationTable_IncentiveFilterInput
+}

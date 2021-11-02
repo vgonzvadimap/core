@@ -1,0 +1,15 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-frontendplatform-victordev-105851-authRole",
+      "UnauthRoleArn": "arn:aws:iam::718770198770:role/amplify-frontendplatform-victordev-105851-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::718770198770:role/amplify-frontendplatform-victordev-105851-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-frontendplatform-victordev-105851-deployment",
+      "UnauthRoleName": "amplify-frontendplatform-victordev-105851-unauthRole",
+      "StackName": "amplify-frontendplatform-victordev-105851",
+      "StackId": "arn:aws:cloudformation:us-east-1:718770198770:stack/amplify-frontendplatform-victordev-105851/90ba9d60-37ff-11ec-8636-0e5f5b5ba89f",
+      "AmplifyAppId": "d3v6k3h4q38zex"
+    }
+  }
+}

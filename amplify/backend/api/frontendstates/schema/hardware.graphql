@@ -1,0 +1,248 @@
+enum Categories {
+  BATTERY
+  CONTROLLER
+  EV_CHARGER
+  INVERTER
+  INVERTER_CHARGER
+  HYBRID_INVERTER
+  MPPT
+  RAPID_SHUTDOWN
+  SOLAR_PANEL
+}
+
+enum Subcategories {
+  SOFTWARE
+  HARDWARE
+  LEVEL_2
+  RECEIVER
+  TRANSMITTER
+  LFP
+  ROOFTOP
+  GROUNDMOUNT
+  ONE_PHASE
+  THREE_PHASES
+  CENTRAL
+  STRING_3_PHASES
+  STRING_1_PHASE
+  BIFACIAL
+  POLYCRISTALLINE
+  MONOCRISTALLINE
+  LITHIUM_ION
+  MONOCRYSTALLIN
+}
+
+enum CurrencyType {
+  CAD
+  USD
+}
+
+enum Usage {
+  Indoor
+  Outdoor
+  Submersible
+  Explosion_proof
+}
+
+type Equipment
+  @model
+  @key(name: "bySpecs", fields: ["specsID"])
+  @key(name: "byManufacturer", fields: ["manufacturerID"])
+  @key(name: "byCategory", fields: ["categoryID"])
+  @key(name: "bySubcategory", fields: ["subcategoryID"]) {
+  id: ID!
+
+  description: String
+  url: AWSURL
+
+  specsID: ID!
+  specs: Specs @connection(fields: ["specsID"])
+
+  notes: String
+  sps_name: String!
+  is_active: Boolean
+
+  categoryID: ID!
+  category: Category @connection(fields: ["categoryID"])
+
+  subcategoryID: ID!
+  subcategory: Subcategory @connection(fields: ["subcategoryID"])
+
+  manufacturerID: ID!
+  manufacturer: Manufacturer @connection(fields: ["manufacturerID"])
+
+  supplier: [EquipmentSupplier]
+    @connection(keyName: "byEquipment", fields: ["id"])
+  installer: [EquipmentInstaller]
+    @connection(keyName: "byEquipment", fields: ["id"])
+  certification: [EquipmentCertification]
+    @connection(keyName: "byEquipment", fields: ["id"])
+  enclosure: [EquipmentEnclosure]
+    @connection(keyName: "byEquipment", fields: ["id"])
+}
+
+type Manufacturer @model {
+  id: ID!
+  name: String!
+  equipment: [Equipment] @connection(keyName: "byManufacturer", fields: ["id"])
+}
+
+type Supplier @model {
+  id: ID!
+  equipment: [EquipmentSupplier]
+    @connection(keyName: "bySupplier", fields: ["id"])
+}
+
+type EquipmentSupplier
+  @model(queries: null)
+  @key(name: "byEquipment", fields: ["equipmentID", "supplierID"])
+  @key(name: "bySupplier", fields: ["supplierID", "equipmentID"]) {
+  id: ID!
+
+  equipmentID: ID!
+  equipment: Equipment! @connection(fields: ["equipmentID"])
+
+  supplier_item_id: ID!
+  cost: Float!
+  currency: CurrencyType!
+
+  supplierID: ID!
+  supplier: Supplier! @connection(fields: ["supplierID"])
+}
+
+type Installer @model {
+  id: ID!
+  equipment: [EquipmentInstaller]
+    @connection(keyName: "byInstaller", fields: ["id"])
+}
+
+type EquipmentInstaller
+  @model(queries: null)
+  @key(name: "byEquipment", fields: ["equipmentID", "installerID"])
+  @key(name: "byInstaller", fields: ["installerID", "equipmentID"]) {
+  id: ID!
+
+  equipmentID: ID!
+  equipment: Equipment! @connection(fields: ["equipmentID"])
+
+  is_available: Boolean
+  cost: Float!
+  currency: CurrencyType!
+
+  installerID: ID!
+  installer: Installer! @connection(fields: ["installerID"])
+}
+
+type Certification @model {
+  id: ID!
+  type: String!
+  certifyingEntity: String!
+  certificationDate: AWSDate!
+  edition: String!
+
+  zone: [CertificationZone]
+    @connection(keyName: "byCertification", fields: ["id"])
+  equipment: [EquipmentCertification]
+    @connection(keyName: "byCertification", fields: ["id"])
+  utilityZone: [Certification_UtilityZone]
+    @connection(keyName: "byCertification", fields: ["id"])
+  category: [CategoryCertification]
+    @connection(keyName: "byCertification", fields: ["id"])
+}
+
+type EquipmentCertification
+  @model(queries: null)
+  @key(name: "byEquipment", fields: ["equipmentID", "certificationID"])
+  @key(name: "byCertification", fields: ["certificationID", "equipmentID"]) {
+  id: ID!
+
+  equipmentID: ID!
+  equipment: Equipment! @connection(fields: ["equipmentID"])
+
+  certificationID: ID!
+  certification: Installer! @connection(fields: ["certificationID"])
+}
+
+type CertificationZone
+  @model(queries: null)
+  @key(name: "byZone", fields: ["zoneID", "certificationID"])
+  @key(name: "byCertification", fields: ["certificationID", "zoneID"]) {
+  id: ID!
+
+  zoneID: ID!
+  zone: Zone! @connection(fields: ["zoneID"])
+
+  certificationID: ID!
+  certification: Certification! @connection(fields: ["certificationID"])
+}
+
+type Certification_UtilityZone
+  @model(queries: null)
+  @key(name: "byUtilityZone", fields: ["utilityZoneID", "certificationID"])
+  @key(name: "byCertification", fields: ["certificationID", "utilityZoneID"]) {
+  id: ID!
+
+  utilityZoneID: ID!
+  utilityZone: UtilityZone! @connection(fields: ["utilityZoneID"])
+
+  certificationID: ID!
+  certification: Certification! @connection(fields: ["certificationID"])
+}
+
+type CategoryCertification
+  @model(queries: null)
+  @key(name: "byCertification", fields: ["certificationID", "categoryID"])
+  @key(name: "byCategory", fields: ["categoryID", "certificationID"]) {
+  id: ID!
+
+  certificationID: ID!
+  certification: Certification! @connection(fields: ["certificationID"])
+
+  categoryID: ID!
+  category: Category! @connection(fields: ["categoryID"])
+}
+
+type Category @model {
+  id: ID!
+  name: Categories!
+  subcategory: [Subcategory] @connection(keyName: "byCategory", fields: ["id"])
+  equipment: [Equipment] @connection(keyName: "byCategory", fields: ["id"])
+  certification: [CategoryCertification]
+    @connection(keyName: "byCategory", fields: ["id"])
+}
+
+type Subcategory @model @key(name: "byCategory", fields: ["categoryID"]) {
+  id: ID!
+  name: Subcategories!
+
+  categoryID: ID!
+  category: Category @connection(fields: ["categoryID"])
+
+  equipment: [Equipment] @connection(keyName: "bySubcategory", fields: ["id"])
+
+  depreciation_table: [DepreciationTable]
+    @connection(keyName: "bySubcategory", fields: ["id"])
+}
+
+type Enclosure @model {
+  id: ID!
+  NEMA: String!
+  IP: String
+  description: String!
+  usage1: Usage!
+  usage2: Usage
+  equipment: [EquipmentEnclosure]
+    @connection(keyName: "byEnclosure", fields: ["id"])
+}
+
+type EquipmentEnclosure
+  @model(queries: null)
+  @key(name: "byEquipment", fields: ["equipmentID", "enclosureID"])
+  @key(name: "byEnclosure", fields: ["enclosureID", "equipmentID"]) {
+  id: ID!
+
+  equipmentID: ID!
+  equipment: Equipment! @connection(fields: ["equipmentID"])
+
+  enclosureID: ID!
+  enclosure: Enclosure! @connection(fields: ["enclosureID"])
+}

@@ -1,0 +1,12 @@
+type Answer @model @key(name: "byProject", fields: ["projectID"]) {
+  id: ID!
+  # should we split Answer and Question so it is possible to track
+  # all different answers to a specific question in time? NO
+  question_title: AWSJSON! #quelle est la difference entre question title et question key?
+  question_key: String! # question pour sam ^
+  input_type: String!
+  answer: AWSJSON!
+  answer_metadata: AWSJSON! #is input type already part of answer metadata?
+  projectID: ID!
+  project: Project @connection(fields: ["projectID"])
+}
